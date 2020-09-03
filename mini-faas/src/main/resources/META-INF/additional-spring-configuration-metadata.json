@@ -1,0 +1,118 @@
+{
+  "properties": [
+    {
+      "name": "nodeManager.maxCpuUsageRatio",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 85,
+      "description": "node节点的cpu最大使用比例."
+    },
+    {
+      "name": "nodeManager.maxMemUsageRatio",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 0.85,
+      "description": "node节点的内存最大使用比例."
+    },
+    {
+      "name": "nodeManager.needScaleCpuUsageRatio",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 75,
+      "description": "node节点需要扩容的cpu使用比例."
+    },
+    {
+      "name": "nodeManager.needScaleMemUsageRatio",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 0.75,
+      "description": "node节点需要扩容的内存使用比例."
+    },
+    {
+      "name": "schedulerCore.initSize",
+      "type": "java.lang.Integer",
+      "defaultValue": 1,
+      "description": "初始化node集合的大小."
+    },
+    {
+      "name": "schedulerCore.awaitTime",
+      "type": "java.lang.Integer",
+      "defaultValue": 50,
+      "description": "并发创建新资源的等待时间."
+    },
+    {
+      "name": "schedulerCore.enableGetContainerPlan",
+      "type": "java.lang.String",
+      "defaultValue": 50,
+      "description": "利用已有资源获取容器的策略."
+    },
+    {
+      "name": "containerManager.maxCpuUsageRatio",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 85,
+      "description": "容器的CPU最大使用比例."
+    },
+    {
+      "name": "containerManager.maxMemUsageRatio",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 0.85,
+      "description": "容器的内存最大使用比例."
+    },
+    {
+      "name": "containerManager.needScaleCpuUsageRatio",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 75,
+      "description": "容器需要扩容的cpu使用比例."
+    },
+    {
+      "name": "containerManager.needScaleMemUsageRatio",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 0.75,
+      "description": "容器需要扩容的内存使用比例."
+    },
+    {
+      "name": "containerManager.maxDelayCleanTime",
+      "type": "java.lang.Integer",
+      "defaultValue": 2,
+      "description": "容器最大延后清理的时间(s)."
+    },
+    {
+      "name": "containerManager.expandDivisor",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 2,
+      "description": "容器扩容的增长系数."
+    },
+    {
+      "name": "scaleService.maxIntervalTime",
+      "type": "java.lang.Integer",
+      "defaultValue": 2,
+      "description": "需要扩容的函数的最大调用间隔(s)."
+    },
+    {
+      "name": "scaleService.reserveNodeTtl",
+      "type": "java.lang.Integer",
+      "defaultValue": 5,
+      "description": "扩容申请node的超时时间."
+    },
+    {
+      "name": "moveReq.minLiveTime",
+      "type": "java.lang.Integer",
+      "defaultValue": 10,
+      "description": "需要迁移请求的容器的最小存活时间."
+    },
+    {
+      "name": "functionManager.awaitTime",
+      "type": "java.lang.Integer",
+      "defaultValue": 100,
+      "description": "函数的限流波次的等待时间(ms)."
+    },
+    {
+      "name": "functionManager.descentIntervalTime",
+      "type": "java.lang.Integer",
+      "defaultValue": 100,
+      "description": "函数令牌桶阀值下降的间隔时间(ms)."
+    },
+    {
+      "name": "executors",
+      "type": "java.util.List",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.executor.properties.ExecutorProperties",
+      "description": "线程池实例配置列表."
+    }
+  ]
+}
