@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxin.faas.scheduler.repository.mapper.FuncMapper">
+  <resultMap id="BaseResultMap" type="com.jxin.faas.scheduler.repository.table.Func">
+    <!--@mbg.generated-->
+    <!--@Table func-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="memory_size" jdbcType="BIGINT" property="memorySize" />
+    <result column="handler" jdbcType="VARCHAR" property="handler" />
+    <result column="timeout" jdbcType="INTEGER" property="timeout" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="deleted" jdbcType="TINYINT" property="deleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, "name", memory_size, "handler", timeout, create_time, modify_time, deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from func
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from func
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.jxin.faas.scheduler.repository.table.Func" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into func ("name", memory_size, "handler", 
+      timeout, create_time, modify_time, 
+      deleted)
+    values (#{name,jdbcType=VARCHAR}, #{memorySize,jdbcType=BIGINT}, #{handler,jdbcType=VARCHAR}, 
+      #{timeout,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{deleted,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.jxin.faas.scheduler.repository.table.Func" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into func
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        "name",
+      </if>
+      <if test="memorySize != null">
+        memory_size,
+      </if>
+      <if test="handler != null">
+        "handler",
+      </if>
+      <if test="timeout != null">
+        timeout,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="memorySize != null">
+        #{memorySize,jdbcType=BIGINT},
+      </if>
+      <if test="handler != null">
+        #{handler,jdbcType=VARCHAR},
+      </if>
+      <if test="timeout != null">
+        #{timeout,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxin.faas.scheduler.repository.table.Func">
+    <!--@mbg.generated-->
+    update func
+    <set>
+      <if test="name != null">
+        "name" = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="memorySize != null">
+        memory_size = #{memorySize,jdbcType=BIGINT},
+      </if>
+      <if test="handler != null">
+        "handler" = #{handler,jdbcType=VARCHAR},
+      </if>
+      <if test="timeout != null">
+        timeout = #{timeout,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxin.faas.scheduler.repository.table.Func">
+    <!--@mbg.generated-->
+    update func
+    set "name" = #{name,jdbcType=VARCHAR},
+      memory_size = #{memorySize,jdbcType=BIGINT},
+      "handler" = #{handler,jdbcType=VARCHAR},
+      timeout = #{timeout,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--auto generated by MybatisCodeHelper on 2020-09-03-->
+  <select id="findByName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from func
+        where `name`=#{name,jdbcType=VARCHAR}
+    </select>
+</mapper>

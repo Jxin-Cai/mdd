@@ -4,8 +4,7 @@ import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
-import com.jxin.faas.scheduler.domain.entity.dmo.Node;
-import lombok.SneakyThrows;
+import com.jxin.faas.scheduler.repository.table.Node;
 import org.junit.Test;
 
 import java.math.BigDecimal;

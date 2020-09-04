@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxin.faas.scheduler.repository.mapper.NodeMapper">
+  <resultMap id="BaseResultMap" type="com.jxin.faas.scheduler.repository.table.Node">
+    <!--@mbg.generated-->
+    <!--@Table node-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="node_id" jdbcType="VARCHAR" property="nodeId" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="port" jdbcType="INTEGER" property="port" />
+    <result column="idle_mem_size" jdbcType="BIGINT" property="idleMemSize" />
+    <result column="total_mem_size" jdbcType="BIGINT" property="totalMemSize" />
+    <result column="cpu_usage_ratio" jdbcType="DECIMAL" property="cpuUsageRatio" />
+    <result column="order" jdbcType="INTEGER" property="order" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="deleted" jdbcType="TINYINT" property="deleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, node_id, address, port, idle_mem_size, total_mem_size, cpu_usage_ratio, "order", 
+    create_time, modify_time, deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from node
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from node
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.jxin.faas.scheduler.repository.table.Node" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into node (node_id, address, port, 
+      idle_mem_size, total_mem_size, cpu_usage_ratio, 
+      "order", create_time, modify_time, 
+      deleted)
+    values (#{nodeId,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{port,jdbcType=INTEGER}, 
+      #{idleMemSize,jdbcType=BIGINT}, #{totalMemSize,jdbcType=BIGINT}, #{cpuUsageRatio,jdbcType=DECIMAL}, 
+      #{order,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
+      #{deleted,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.jxin.faas.scheduler.repository.table.Node" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into node
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nodeId != null">
+        node_id,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="port != null">
+        port,
+      </if>
+      <if test="idleMemSize != null">
+        idle_mem_size,
+      </if>
+      <if test="totalMemSize != null">
+        total_mem_size,
+      </if>
+      <if test="cpuUsageRatio != null">
+        cpu_usage_ratio,
+      </if>
+      <if test="order != null">
+        "order",
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nodeId != null">
+        #{nodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=INTEGER},
+      </if>
+      <if test="idleMemSize != null">
+        #{idleMemSize,jdbcType=BIGINT},
+      </if>
+      <if test="totalMemSize != null">
+        #{totalMemSize,jdbcType=BIGINT},
+      </if>
+      <if test="cpuUsageRatio != null">
+        #{cpuUsageRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="order != null">
+        #{order,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        #{deleted,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxin.faas.scheduler.repository.table.Node">
+    <!--@mbg.generated-->
+    update node
+    <set>
+      <if test="nodeId != null">
+        node_id = #{nodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        port = #{port,jdbcType=INTEGER},
+      </if>
+      <if test="idleMemSize != null">
+        idle_mem_size = #{idleMemSize,jdbcType=BIGINT},
+      </if>
+      <if test="totalMemSize != null">
+        total_mem_size = #{totalMemSize,jdbcType=BIGINT},
+      </if>
+      <if test="cpuUsageRatio != null">
+        cpu_usage_ratio = #{cpuUsageRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="order != null">
+        "order" = #{order,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="deleted != null">
+        deleted = #{deleted,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxin.faas.scheduler.repository.table.Node">
+    <!--@mbg.generated-->
+    update node
+    set node_id = #{nodeId,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      port = #{port,jdbcType=INTEGER},
+      idle_mem_size = #{idleMemSize,jdbcType=BIGINT},
+      total_mem_size = #{totalMemSize,jdbcType=BIGINT},
+      cpu_usage_ratio = #{cpuUsageRatio,jdbcType=DECIMAL},
+      "order" = #{order,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--auto generated by MybatisCodeHelper on 2020-09-03-->
+  <delete id="deleteByNodeId">
+    delete from node
+    where node_id=#{nodeId,jdbcType=VARCHAR}
+  </delete>
+
+<!--auto generated by MybatisCodeHelper on 2020-09-03-->
+  <update id="updateByNodeId">
+    update node
+    <set>
+      <if test="updated.id != null">
+        id = #{updated.id,jdbcType=INTEGER},
+      </if>
+      <if test="updated.nodeId != null">
+        node_id = #{updated.nodeId,jdbcType=VARCHAR},
+      </if>
+      <if test="updated.address != null">
+        address = #{updated.address,jdbcType=VARCHAR},
+      </if>
+      <if test="updated.port != null">
+        port = #{updated.port,jdbcType=INTEGER},
+      </if>
+      <if test="updated.idleMemSize != null">
+        idle_mem_size = #{updated.idleMemSize,jdbcType=BIGINT},
+      </if>
+      <if test="updated.totalMemSize != null">
+        total_mem_size = #{updated.totalMemSize,jdbcType=BIGINT},
+      </if>
+      <if test="updated.cpuUsageRatio != null">
+        cpu_usage_ratio = #{updated.cpuUsageRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="updated.order != null">
+        order = #{updated.order,jdbcType=INTEGER},
+      </if>
+      <if test="updated.createTime != null">
+        create_time = #{updated.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updated.modifyTime != null">
+        modify_time = #{updated.modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updated.deleted != null">
+        deleted = #{updated.deleted,jdbcType=TINYINT},
+      </if>
+    </set>
+    where node_id=#{nodeId,jdbcType=VARCHAR}
+  </update>
+
+<!--auto generated by MybatisCodeHelper on 2020-09-03-->
+  <select id="findByIdleMemSizeGreaterThanAndCpuUsageRatioLessThanOrderByOrder" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from node
+    where idle_mem_size <![CDATA[>]]> #{minIdleMemSize,jdbcType=BIGINT} and cpu_usage_ratio <![CDATA[<]]>
+    #{maxCpuUsageRatio,jdbcType=DECIMAL} order by `order` asc limit 1
+  </select>
+
+<!--auto generated by MybatisCodeHelper on 2020-09-04-->
+  <update id="updateIdleMemSizeByNodeIdAndIdleMemSize">
+    update node
+    set idle_mem_size=idle_mem_size-#{idleMemSize,jdbcType=BIGINT}
+    where node_id=#{nodeId,jdbcType=VARCHAR} and idle_mem_size-#{idleMemSize,jdbcType=BIGINT} > 0
+  </update>
+
+
+<!--auto generated by MybatisCodeHelper on 2020-09-04-->
+  <select id="countByCpuUsageRatioAndMemUsageRatioLessThan" resultType="java.lang.Integer">
+    select count(1)
+    from node
+    where total_mem_size - idle_mem_size / total_mem_size <![CDATA[>]]> #{maxMemUsageRatio,jdbcType=DECIMAL}
+          and cpu_usage_ratio <![CDATA[<]]> #{maxCpuUsageRatio,jdbcType=DECIMAL}
+  </select>
+
+<!--auto generated by MybatisCodeHelper on 2020-09-04-->
+  <select id="findNodeId" resultType="java.lang.String">
+    select node_id from node
+  </select>
+
+
+</mapper>

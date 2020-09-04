@@ -4,20 +4,19 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Lists;
-import com.jxin.faas.scheduler.domain.util.IJsonUtil;
-import com.jxin.faas.scheduler.infrastructure.util.GsonJsonUtil;
+import com.jxin.faas.scheduler.infrastructure.util.IJsonUtil;
+import com.jxin.faas.scheduler.infrastructure.util.impl.GsonJsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import schedulerproto.ReturnContainerRequest;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 归还日志测试类
+ * 归还日志分析类
  * @author Jxin
  * @version 1.0
  * @since 2020/7/30 16:59

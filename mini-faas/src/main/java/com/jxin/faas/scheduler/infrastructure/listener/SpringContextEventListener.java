@@ -1,17 +1,14 @@
 package com.jxin.faas.scheduler.infrastructure.listener;
 
-import com.jxin.faas.scheduler.application.acl.resourcemanager.IResourceManagerAcl;
-import com.jxin.faas.scheduler.application.service.ISchedulerCoreService;
-import com.jxin.faas.scheduler.domain.util.IShutdownHook;
+import com.jxin.faas.scheduler.infrastructure.util.IShutdownHook;
+import com.jxin.faas.scheduler.service.acl.resourcemanager.IResourceManagerAcl;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 import resourcemanagerproto.ResourceManagerGrpc;
 

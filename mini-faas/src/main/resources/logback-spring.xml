@@ -30,5 +30,18 @@
     <logger name="org.springframework" level="INFO" />
     <logger name="io.grpc.netty.shaded" level="INFO" />
     <logger name="net.devh.boot" level="INFO" />
+    <logger name="com.zaxxer.hikari" level="INFO" />
+    <logger name="org.mybatis" level="INFO" />
+    <logger name="org.hibernate.validator" level="INFO" />
+    <logger name="io.undertow" level="INFO" />
+    <logger name="log4jdbc" level="INFO" />
+    <logger name="org.xnio" level="INFO" />
+    <logger name="jdbc.sqlonly" level="WARN"/>
+    <logger name="jdbc.sqltiming" level="INFO"/>
+    <logger name="jdbc.resultsettable" level="INFO"/>
+    <logger name="jdbc.resultset" level="WARN"/>
+    <logger name="jdbc.connection" level="WARN"/>
+    <logger name="jdbc.audit" level="WARN"/>
+    <logger name="org.apache.ibatis" level="INFO" />
 
 </configuration>

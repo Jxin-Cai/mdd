@@ -1,6 +1,6 @@
 package com.jxin.faas.scheduler.interfaces.job;
 
-import com.jxin.faas.scheduler.application.service.IRefreshResourceService;
+import com.jxin.faas.scheduler.service.INodeManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,19 +15,20 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class RefreshResourceStatJob {
-    private final IRefreshResourceService refreshResourceService;
+    private final INodeManager nodeManager;
 
     @Autowired
-    public RefreshResourceStatJob(IRefreshResourceService refreshResourceService) {
-        this.refreshResourceService = refreshResourceService;
+    public RefreshResourceStatJob(INodeManager nodeManager) {
+        this.nodeManager = nodeManager;
     }
+
 
     @Scheduled(initialDelay = 20000, fixedRate = 200)
     public void refresh() {
         if(log.isDebugEnabled()){
             log.debug("==================定时刷新资源状态开始==================");
         }
-        refreshResourceService.refreshResourceStat();
+        nodeManager.releaseNode();
         if(log.isDebugEnabled()){
             log.debug("==================定时刷新资源状态结束==================");
         }

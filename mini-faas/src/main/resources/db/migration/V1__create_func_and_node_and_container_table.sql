@@ -12,15 +12,23 @@ drop table if exists node;
 create table container
 (
    id                   int(11) not null auto_increment,
-   node_id              varchar(30) comment '节点id',
+   container_id         varchar(30) not null comment '容器Id',
+   node_id              varchar(30) not null comment '节点id',
+   address              varchar(50) not null default '-1' comment '地址',
+   port                 int(11) not null default 0 comment '端口号',
+   "order"              int(11) not null default 0 comment '顺序',
    fun_id               int(11) comment '函数id',
+   func_name            varchar(30) not null comment '函数名',
+   outtime              timestamp default NULL comment '超时时间',
    mem_size             bigint(30) not null default 0 comment '内存大小',
    cpu_usage_ratio      decimal(8,5) not null comment 'cpu使用率',
+   enabled              tinyint(1) not null default 0 comment '使用状态: 0 使用 1未使用',
    create_time          timestamp not null default CURRENT_TIMESTAMP comment '创建时间',
    modify_time          timestamp not null default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP comment '修改时间',
    deleted              tinyint(1) not null default 0 comment '逻辑删除',
    primary key (id)
 );
+
 
 /*==============================================================*/
 /* Table: func                                                  */

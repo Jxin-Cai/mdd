@@ -1,22 +1,18 @@
 package com.jxin.faas.scheduler.interfaces.acl.resourcemanager;
 
 import cn.hutool.core.util.StrUtil;
-import com.jxin.faas.scheduler.application.acl.nodeservice.INodeServiceAcl;
-import com.jxin.faas.scheduler.application.acl.resourcemanager.IResourceManagerAcl;
-import com.jxin.faas.scheduler.domain.entity.dmo.Node;
-import com.jxin.faas.scheduler.domain.entity.val.NodeInfoVal;
-import com.jxin.faas.scheduler.domain.util.IJsonUtil;
+import com.jxin.faas.scheduler.infrastructure.util.IJsonUtil;
+import com.jxin.faas.scheduler.repository.table.Node;
+import com.jxin.faas.scheduler.service.acl.nodeservice.INodeServiceAcl;
+import com.jxin.faas.scheduler.service.acl.resourcemanager.IResourceManagerAcl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import resourcemanagerproto.*;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.LongAdder;
-import java.util.stream.Collectors;
 
 /**
  * 资源管理器防腐层
@@ -30,7 +26,6 @@ public class ResourceManagerAcl implements IResourceManagerAcl {
 
     /**节点申请顺序计数器*/
     private static final AtomicInteger ORDER_COUNT = new AtomicInteger(0);
-    // @GrpcClient("faas-resource")
     private ResourceManagerGrpc.ResourceManagerBlockingStub resourceManagerStub;
     private final INodeServiceAcl nodeServiceAcl;
     private final IJsonUtil jsonUtil;
@@ -76,18 +71,5 @@ public class ResourceManagerAcl implements IResourceManagerAcl {
                                                           .setRequestId(requestId)
                                                           .setId(nodeId).build());
     }
-    @Override
-    public List<NodeInfoVal> getNodesUsage(String requestId) {
-        final GetNodesUsageReply nodesUsage =
-                resourceManagerStub.getNodesUsage(GetNodesUsageRequest.newBuilder()
-                                                                      .setRequestId(requestId)
-                                                                      .build());
-        Assert.notNull(nodesUsage, StrUtil.format("[ResourceManager],查看占用node列表返回为空,requestId : {}", requestId));
-       return nodesUsage.getNodesList().stream()
-                                       .map(node -> NodeInfoVal.of(node.getId(),
-                                                                   node.getAddress(),
-                                                                   node.getNodeServicePort(),
-                                                                   node.getMemoryInBytes()))
-                                       .collect(Collectors.toList());
-    }
+
 }

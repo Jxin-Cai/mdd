@@ -1,6 +1,6 @@
 package com.jxin.faas.scheduler.interfaces.job;
 
-import com.jxin.faas.scheduler.application.service.IScaleService;
+import com.jxin.faas.scheduler.service.INodeManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,11 +15,11 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class ScaleJob {
-    private final IScaleService scaleService;
+    private final INodeManager nodeManager;
 
     @Autowired
-    public ScaleJob(IScaleService scaleService) {
-        this.scaleService = scaleService;
+    public ScaleJob(INodeManager nodeManager) {
+        this.nodeManager = nodeManager;
     }
 
     @Scheduled(initialDelay = 20000, fixedRate = 3000)
@@ -27,20 +27,10 @@ public class ScaleJob {
         if(log.isDebugEnabled()){
             log.debug("==================定时检查并扩容node开始==================");
         }
-        scaleService.scaleNode();
+        nodeManager.scaleNode();
         if(log.isDebugEnabled()){
             log.debug("==================定时检查并扩容node结束==================");
         }
     }
 
-    @Scheduled(initialDelay = 20000, fixedRate = 1000)
-    public void scaleFuncContainerJob() {
-        if(log.isDebugEnabled()){
-            log.debug("==================定时检查并扩容函数容器开始==================");
-        }
-        scaleService.scaleFuncContainer();
-        if(log.isDebugEnabled()){
-            log.debug("==================定时检查并扩容函数容结束==================");
-        }
-    }
 }

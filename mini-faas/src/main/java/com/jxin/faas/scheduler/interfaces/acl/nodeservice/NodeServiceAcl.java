@@ -1,38 +1,30 @@
 package com.jxin.faas.scheduler.interfaces.acl.nodeservice;
 
-import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
-import com.jxin.faas.scheduler.application.acl.nodeservice.INodeServiceAcl;
-import com.jxin.faas.scheduler.domain.entity.dmo.Container;
-import com.jxin.faas.scheduler.domain.entity.dmo.Node;
-import com.jxin.faas.scheduler.domain.entity.val.ContainerStatVal;
-import com.jxin.faas.scheduler.domain.entity.val.FunctionInfoVal;
-import com.jxin.faas.scheduler.domain.entity.val.NodeStatVal;
-import com.jxin.faas.scheduler.domain.util.IShutdownHook;
-import com.jxin.faas.scheduler.domain.util.IdUtil;
+import com.jxin.faas.scheduler.infrastructure.util.IShutdownHook;
+import com.jxin.faas.scheduler.infrastructure.util.IdUtil;
+import com.jxin.faas.scheduler.repository.table.Container;
+import com.jxin.faas.scheduler.repository.table.Func;
+import com.jxin.faas.scheduler.repository.table.Node;
+import com.jxin.faas.scheduler.service.acl.nodeservice.INodeServiceAcl;
+import com.jxin.faas.scheduler.service.entity.NodeStatVal;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import lombok.extern.slf4j.Slf4j;
 import nodeservoceproto.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 /**
  * 节点服务防腐层
@@ -61,24 +53,24 @@ public class NodeServiceAcl implements INodeServiceAcl {
     @Override
     public Optional<Container> createContainer(String requestId,
                                                Node node,
-                                               FunctionInfoVal functionInfoVal) {
+                                               Func func) {
         final String containerId;
         try {
             final NodeServiceGrpc.NodeServiceBlockingStub nodeServiceBlockingStub =
-                    nodeServiceBlockingStubMap.get(node.getId());
+                    nodeServiceBlockingStubMap.get(node.getNodeId());
             Assert.notNull(nodeServiceBlockingStub, "[NodeService],节点客户端桩不存在,nodeId: " + node.getId());
 
             final FunctionMeta functionMeta = FunctionMeta.newBuilder()
-                                                          .setFunctionName(functionInfoVal.getName())
-                                                          .setHandler(functionInfoVal.getHandler())
-                                                          .setMemoryInBytes(functionInfoVal.getMemorySize())
-                                                          .setTimeoutInMs(functionInfoVal.getTimeout())
+                                                          .setFunctionName(func.getName())
+                                                          .setHandler(func.getHandler())
+                                                          .setMemoryInBytes(func.getMemorySize())
+                                                          .setTimeoutInMs(func.getTimeout())
                                                           .build();
 
             final CreateContainerReply container =
                     nodeServiceBlockingStub.createContainer(CreateContainerRequest.newBuilder()
                                            .setRequestId(requestId)
-                                           .setName(functionInfoVal.getName() + COUNT.incrementAndGet())
+                                           .setName(func.getName() + COUNT.incrementAndGet())
                                            .setFunctionMeta(functionMeta)
                                            .build());
             Assert.notNull(container, "[NodeService],创建容器,返回参数为null, requestId: " + requestId);
@@ -92,17 +84,13 @@ public class NodeServiceAcl implements INodeServiceAcl {
             return Optional.empty();
         }
 
-        return Optional.of(Container.of(containerId,
-                                        node,
-                                        NumberUtil.div(functionInfoVal.getMemorySize(), node.getTotalMemSize()),
-                                        functionInfoVal.getName(),
-                                        functionInfoVal.getMemorySize()));
+        return Optional.of(Container.of(containerId, node, func));
     }
 
     @Override
-    public Optional<Container> loopGetContainer(String requestId, FunctionInfoVal functionInfoVal, Node node, Integer maxCount) {
+    public Optional<Container> loopGetContainer(String requestId, Func func, Node node, Integer maxCount) {
         for (int i = 0; i < maxCount; i++) {
-            final Optional<Container> containerOpt = createContainer(IdUtil.getRequestId(), node, functionInfoVal);
+            final Optional<Container> containerOpt = createContainer(IdUtil.getRequestId(), node, func);
             if(!containerOpt.isPresent()){
                 continue;
             }
@@ -110,7 +98,7 @@ public class NodeServiceAcl implements INodeServiceAcl {
         }
         return Optional.empty();
     }
-    @Async("removeExecutor")
+    @Async("cleanExecutor")
     @Override
     public void removeContainer(String requestId, String nodeId, String containerId, CountDownLatch latch) {
         final NodeServiceGrpc.NodeServiceBlockingStub nodeServiceBlockingStub =
@@ -166,18 +154,12 @@ public class NodeServiceAcl implements INodeServiceAcl {
         final GetStatsReply stats = nodeServiceBlockingStub.getStats(GetStatsRequest.newBuilder().setRequestId(IdUtil.getRequestId()).build());
         Assert.notNull(stats, "[NodeService],获取容器列表,返回为null, nodeId: " + nodeId);
 
-        final List<ContainerStatVal> containerStatList = stats.getContainerStatsListList().stream()
-                .map(container -> ContainerStatVal.of(container.getContainerId(),
-                                                      container.getTotalMemoryInBytes(),
-                                                      container.getMemoryUsageInBytes(),
-                                                      BigDecimal.valueOf(container.getCpuUsagePct())))
-                .collect(Collectors.toList());
+        final long sum = stats.getContainerStatsListList().stream().mapToLong(ContainerStats::getTotalMemoryInBytes).sum();
         final NodeStats nodeStats = stats.getNodeStats();
         return NodeStatVal.of(nodeId,
                               nodeStats.getTotalMemoryInBytes(),
-                              nodeStats.getAvailableMemoryInBytes(),
+                              nodeStats.getMemoryUsageInBytes() - sum,
                               nodeStats.getMemoryUsageInBytes(),
-                              BigDecimal.valueOf(nodeStats.getCpuUsagePct()),
-                              containerStatList);
+                              BigDecimal.valueOf(nodeStats.getCpuUsagePct()));
     }
 }

@@ -34,13 +34,8 @@ public class GlobalLogAop {
     @Pointcut("execution(* com.jxin.faas.scheduler.interfaces.grpc.*.*.*(..))")
     private void grpcPointcut(){}
 
-    /**
-     * 核心实现代码的Pointcut
-     */
-    @Pointcut("execution(* com.jxin.faas.scheduler.application.service.*.*.*(..))")
-    private void corePointcut(){}
 
-    @Pointcut("aclPointcut() || grpcPointcut() || corePointcut()")
+    @Pointcut("aclPointcut() || grpcPointcut()")
     private void allPointcut(){}
 
     @Around("allPointcut()")

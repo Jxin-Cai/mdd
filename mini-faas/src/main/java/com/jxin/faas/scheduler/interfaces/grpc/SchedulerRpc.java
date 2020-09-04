@@ -1,14 +1,18 @@
 package com.jxin.faas.scheduler.interfaces.grpc;
 
-import com.jxin.faas.scheduler.application.service.IAcquireContainerService;
-import com.jxin.faas.scheduler.application.service.IReturnContainerService;
-import com.jxin.faas.scheduler.domain.util.IJsonUtil;
+import com.jxin.faas.scheduler.infrastructure.util.IJsonUtil;
+import com.jxin.faas.scheduler.repository.table.Container;
+import com.jxin.faas.scheduler.repository.table.Func;
+import com.jxin.faas.scheduler.service.ISchedulerService;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import schedulerproto.*;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 调度器的 RPC服务
@@ -19,14 +23,15 @@ import schedulerproto.*;
 @GrpcService
 @Slf4j
 public class SchedulerRpc extends SchedulerGrpc.SchedulerImplBase {
-    private final IAcquireContainerService acquireContainerService;
-    private final IReturnContainerService returnContainerService;
+    /**请求数计数器*/
+    private static final AtomicInteger ACQUIRE_COUNT = new AtomicInteger(0);
+
+    private final ISchedulerService schedulerService;
     private final IJsonUtil jsonUtil;
 
     @Autowired
-    public SchedulerRpc(IAcquireContainerService acquireContainerService, IReturnContainerService returnContainerService, IJsonUtil jsonUtil) {
-        this.acquireContainerService = acquireContainerService;
-        this.returnContainerService = returnContainerService;
+    public SchedulerRpc(ISchedulerService schedulerService, IJsonUtil jsonUtil) {
+        this.schedulerService = schedulerService;
         this.jsonUtil = jsonUtil;
     }
 
@@ -34,7 +39,25 @@ public class SchedulerRpc extends SchedulerGrpc.SchedulerImplBase {
     public void acquireContainer(AcquireContainerRequest request, StreamObserver<AcquireContainerReply> responseObserver) {
         try {
             Assert.notNull(request, "[Scheduler],acquireContainer,入参不能为null");
-            final AcquireContainerReply acquireContainerReply = acquireContainerService.acquireContainer(request);
+            if (log.isDebugEnabled()){
+                log.debug("[acquireContainer],请求计数器,当前请求数: {}", ACQUIRE_COUNT.incrementAndGet());
+            }
+            if(log.isDebugEnabled()){
+                log.debug("[acquireContainer],请求container,request: {}", jsonUtil.beanJson(request));
+            }
+
+
+            final Container container =
+                    schedulerService.getContainer(request.getRequestId(),
+                                                  request.getAccountId(),
+                                                  warpFunc(request));
+            final AcquireContainerReply acquireContainerReply =
+                    AcquireContainerReply.newBuilder()
+                                         .setNodeId(container.getNodeId())
+                                         .setNodeAddress(container.getAddress())
+                                         .setNodeServicePort(container.getPort())
+                                         .setContainerId(container.getContainerId())
+                                         .build();
             responseObserver.onNext(acquireContainerReply);
         }catch (Exception e){
             log.warn(e.getMessage());
@@ -46,6 +69,14 @@ public class SchedulerRpc extends SchedulerGrpc.SchedulerImplBase {
         responseObserver.onCompleted();
     }
 
+    private Func warpFunc(AcquireContainerRequest request) {
+        final FunctionConfig functionConfig = request.getFunctionConfig();
+        return Func.of(request.getFunctionName(),
+                       functionConfig.getMemoryInBytes(),
+                       functionConfig.getHandler(),
+                       (int)functionConfig.getTimeoutInMs());
+    }
+
     @Override
     public void returnContainer(ReturnContainerRequest request, StreamObserver<ReturnContainerReply> responseObserver) {
         try {
@@ -53,11 +84,9 @@ public class SchedulerRpc extends SchedulerGrpc.SchedulerImplBase {
             if(log.isDebugEnabled()){
                 log.debug("[returnContainer],归还container,request: {}", jsonUtil.beanJson(request));
             }
-            returnContainerService.returnContainer(request.getRequestId(),
-                                                   request.getContainerId(),
-                                                   request.getDurationInNanos(),
-                                                   request.getMaxMemoryUsageInBytes(),
-                                                   request.getErrorCode());
+            schedulerService.finishRunJob(request.getRequestId(),
+                                          request.getContainerId(),
+                                          StringUtils.isEmpty(request.getErrorCode()));
             responseObserver.onNext(null);
         }catch (Exception e){
             log.warn(e.getMessage());

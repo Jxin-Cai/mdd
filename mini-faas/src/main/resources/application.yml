@@ -38,14 +38,22 @@ spring:
     username: sa
     password:
 
-#mybatis的相关配置
-mybatis:
-  #mapper配置文件
-  mapper-locations: classpath:mapper/*.xml
-  #type-aliases-package:
-  #开启驼峰命名
-  configuration:
-    map-underscore-to-camel-case: true
+log4jdbc:
+
+
+dbs:
+  faas:
+    url: jdbc:h2:mem:faas;DB_CLOSE_DELAY=1000;MODE=MySQL;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+    mybatis:
+      configLocation: sqlMapConfig.xml
+      mapperLocations: classpath:mapper/*.xml
+      mapperScanner: com.jxin.faas.scheduler.repository.mapper
+    pool:
+      driverClassName: org.h2.Driver
+      maximumPoolSize: 200
+
 
 grpc:
   server:
@@ -55,31 +63,14 @@ grpc:
 nodeManager:
   maxCpuUsageRatio: 130
   maxMemUsageRatio: 0.75
-  needScaleCpuUsageRatio: 80
-  needScaleMemUsageRatio: 0.50
+  maxCpuRate: 150
+  scaleCount: 1
+
 containerManager:
   maxCpuUsageRatio: 75
   maxMemUsageRatio: 0.75
-  needScaleCpuUsageRatio: 50
-  needScaleMemUsageRatio: 0.50
   maxDelayCleanTime: 15
   expandDivisor: 2
-
-functionManager:
-  awaitTime: 200
-  descentIntervalTime: 1000
-
-scaleService:
-  maxIntervalTime: 5
-  reserveNodeTtl: 3
-
-schedulerCore:
-  initSize: 0
-  awaitTime: 100
-  enableGetContainerPlan: loopNodeGetContainerPlan
-
-moveReq:
-  minLiveTime: 2
 
 
 executors:
@@ -90,18 +81,8 @@ executors:
     keepAlive: 300
   - id: cleanExecutor
     corePoolSize: 3
-    maxPoolSize: 50
-    queueCapacity: 1000
-    keepAlive: 300
-  - id: removeExecutor
-    corePoolSize: 50
     maxPoolSize: 150
-    queueCapacity: 100000
-    keepAlive: 300
-  - id: serverExecutor
-    corePoolSize: 50
-    maxPoolSize: 300
-    queueCapacity: 5000
+    queueCapacity: 10000
     keepAlive: 300
   - id: scaleExecutor
     corePoolSize: 8
