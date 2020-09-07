@@ -22,7 +22,6 @@ public class EasyTest {
     private static final Map<String, String> ID_LOCK = Maps.newConcurrentMap();
     private static final Map<String, Semaphore> NEW_ID_LOCK = new ConcurrentHashMap<>(20);
 
-    @Test
     public void testConcurrentHashMap(){
         final Set<Integer> set = new ConcurrentHashSet<>();
         for (int i = 0; i < 1000; i++) {
@@ -51,7 +50,7 @@ public class EasyTest {
         }
         System.out.println(set);
     }
-    @Test
+
     public void testIdLock() throws InterruptedException {
         final Executor executor = Executors.newFixedThreadPool(30);
         for (int i = 0; i < 20; i++) {
@@ -93,7 +92,7 @@ public class EasyTest {
             });
         }
     }
-    @Test
+
     public void testNewIdLock() throws InterruptedException {
         final Executor executor = Executors.newFixedThreadPool(30);
         for (int i = 0; i < 20; i++) {
@@ -134,35 +133,35 @@ public class EasyTest {
             });
         }
     }
-    @Test
+
     public void testBigDecimal(){
         final BigDecimal decimal1 = BigDecimal.valueOf(1);
         final BigDecimal decimal2 = BigDecimal.valueOf(2);
         System.out.println(decimal1.compareTo(decimal2));
         System.out.println(decimal2.compareTo(decimal1));
     }
-    @Test
+
     public void test(){
         final Map<String, Node> nodeStatMap = Maps.newHashMap();
         nodeStatMap.put("a1a1", new Node());
         System.out.println( MapUtil.join(nodeStatMap, StrUtil.COMMA, StrUtil.COLON, true));
 
     }
-    @Test
+
     public void testSys(){
         final String config_subfix = System.getenv("CONFIG_SUBFIX");
         final String resource_manager_endpoint = System.getenv("RESOURCE_MANAGER_ENDPOINT");
         System.out.println(config_subfix);
         System.out.println(resource_manager_endpoint);
     }
-    @Test
+
     public void testNode(){
         Set<Integer> nodes = new ConcurrentSkipListSet<>();
         final boolean remove = nodes.remove(5);
         System.out.println(remove);
 
     }
-    @Test
+
     public void testFinally(){
         for (int i = 0; i < 10; i++) {
             try {

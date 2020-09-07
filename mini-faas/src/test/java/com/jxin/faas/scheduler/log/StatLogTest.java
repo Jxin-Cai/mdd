@@ -23,19 +23,25 @@ import java.util.stream.Collectors;
 public class StatLogTest {
     @Test
     public void analyzeStatLog(){
-        final IJsonUtil jsonUtil = new GsonJsonUtil();
-        final List<String> jsonList = readJsonList("E:\\download\\google\\当前节点状态");
-        final List<List<LinkedTreeMap>> collect = jsonList.stream()
-                .map(json -> jsonUtil.json2BeanList(StrUtil.subSuf(json, json.lastIndexOf("nodes:") + 7), LinkedTreeMap.class)).collect(Collectors.toList());
+        try {
+            final IJsonUtil jsonUtil = new GsonJsonUtil();
+            final List<String> jsonList = readJsonList("E:\\download\\google\\当前节点状态");
+            final List<List<LinkedTreeMap>> collect = jsonList.stream()
+                    .map(json -> jsonUtil.json2BeanList(StrUtil.subSuf(json, json.lastIndexOf("nodes:") + 7), LinkedTreeMap.class)).collect(Collectors.toList());
 
-        final List<List<LinkedTreeMap>> collect1 = collect.stream()
-                .filter(nodes -> nodes.stream().anyMatch(map ->
-                        new BigDecimal((Double) map.get("cpuUsageRatio")).compareTo(BigDecimal.valueOf(100)) > 0))
-                .collect(Collectors.toList());
+            final List<List<LinkedTreeMap>> collect1 = collect.stream()
+                    .filter(nodes -> nodes.stream().anyMatch(map ->
+                            new BigDecimal((Double) map.get("cpuUsageRatio")).compareTo(BigDecimal.valueOf(100)) > 0))
+                    .collect(Collectors.toList());
 
-        for (List<LinkedTreeMap> linkedTreeMaps : collect1) {
-            System.out.println(jsonUtil.beanJson(linkedTreeMaps));
+            for (List<LinkedTreeMap> linkedTreeMaps : collect1) {
+                System.out.println(jsonUtil.beanJson(linkedTreeMaps));
+            }
+        }catch (Exception e){
+
         }
+
+
 
     }
 

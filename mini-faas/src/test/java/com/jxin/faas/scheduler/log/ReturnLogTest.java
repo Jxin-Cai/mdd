@@ -25,26 +25,31 @@ import java.util.stream.Collectors;
 public class ReturnLogTest {
     @Test
     public void analyzeReturnLog(){
-        final IJsonUtil jsonUtil = new GsonJsonUtil();
-        final List<String> jsonList = readJsonList("E:\\download\\google\\return.log");
+        try {
+            final IJsonUtil jsonUtil = new GsonJsonUtil();
+            final List<String> jsonList = readJsonList("E:\\download\\google\\return.log");
 
-        final List<ReturnContainerRequest> returnList =
-                jsonList.stream()
-                        .map(json -> StrUtil.subSuf(json, json.indexOf("{")))
-                        .map(json -> jsonUtil.json2Bean(json, ReturnContainerRequest.class)).collect(Collectors.toList());
+            final List<ReturnContainerRequest> returnList =
+                    jsonList.stream()
+                            .map(json -> StrUtil.subSuf(json, json.indexOf("{")))
+                            .map(json -> jsonUtil.json2Bean(json, ReturnContainerRequest.class)).collect(Collectors.toList());
 
-        final Map<String, List<ReturnContainerRequest>> collect =
-                returnList.stream().collect(Collectors.toMap(ReturnContainerRequest::getErrorCode, Lists::newArrayList, (o, o2) -> {
-                    final List<ReturnContainerRequest> result = Lists.newArrayListWithCapacity(o.size() + o2.size());
-                    result.addAll(o);
-                    result.addAll(o2);
-                    return result;
-                }));
+            final Map<String, List<ReturnContainerRequest>> collect =
+                    returnList.stream().collect(Collectors.toMap(ReturnContainerRequest::getErrorCode, Lists::newArrayList, (o, o2) -> {
+                        final List<ReturnContainerRequest> result = Lists.newArrayListWithCapacity(o.size() + o2.size());
+                        result.addAll(o);
+                        result.addAll(o2);
+                        return result;
+                    }));
 
-        collect.forEach((k, v)->{
-            final ReturnContainerRequest first = CollUtil.getFirst(v);
-            log.info("异常类型: {}, 异常信息: {}, 异常数量: {}", first.getErrorCode(), first.getErrorMessage(), v.size());
-        });
+            collect.forEach((k, v)->{
+                final ReturnContainerRequest first = CollUtil.getFirst(v);
+                log.info("异常类型: {}, 异常信息: {}, 异常数量: {}", first.getErrorCode(), first.getErrorMessage(), v.size());
+            });
+        }catch (Exception e){
+
+        }
+
     }
 
     private List<String> readJsonList(String filePath){

@@ -26,21 +26,23 @@ public class LogTest {
 
     @Test
     public void dumpLog(){
-        final IJsonUtil jsonUtil = new GsonJsonUtil();
-        final List<String> jsonList = readJsonList("E:\\download\\google\\231793_351856_1117827");
-        final List<List<String>> split = CollUtil.split(jsonList, 50000);
-        for (int i = 0; i < split.size(); i++) {
-            final List<Log> logs =
-                    split.get(i).stream().map(s -> jsonUtil.json2Bean(s, Log.class)).collect(Collectors.toList());
-            logs.forEach(this::lineHandler);
+        try {
+            final IJsonUtil jsonUtil = new GsonJsonUtil();
+            final List<String> jsonList = readJsonList("E:\\download\\google\\231793_351856_1117827");
+            final List<List<String>> split = CollUtil.split(jsonList, 50000);
+            for (int i = 0; i < split.size(); i++) {
+                final List<Log> logs =
+                        split.get(i).stream().map(s -> jsonUtil.json2Bean(s, Log.class)).collect(Collectors.toList());
+                logs.forEach(this::lineHandler);
 
-            logs.sort(Comparator.comparing(Log::getTime));
+                logs.sort(Comparator.comparing(Log::getTime));
 
-            writeFile("E:\\download\\google\\mini-faas-" + i + ".log",
-                    logs.stream().map(Log::getLog).collect(Collectors.toList()));
+                writeFile("E:\\download\\google\\mini-faas-" + i + ".log",
+                        logs.stream().map(Log::getLog).collect(Collectors.toList()));
+            }
+        }catch (Exception e){
+
         }
-
-
     }
 
 
