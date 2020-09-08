@@ -26,15 +26,16 @@ public interface IContainerRepository {
     List<String> removeIdleContainer(String nodeId, Date lastReqTime);
     /**
      * 删除超时容器
-     * @param nodeId      节点Id
+     * @param nodeId  节点Id
      * @param outTime 超时时间
      */
     List<String> removeOutTimeContainer(String nodeId, Date outTime);
     /**
      * 使用容器
      * @param  containerId 容器id
+     * @param  outTime 超时时间
      */
-    void enableContainer(String containerId);
+    void enableContainer(String containerId, Date outTime);
 
     /**
      * 释放容器

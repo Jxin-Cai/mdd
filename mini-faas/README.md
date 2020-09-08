@@ -60,23 +60,88 @@ data-mdd分支是数据模型驱动设计的实现。当前项目题材是[首�
 ### 数据模型驱动设计
 
 #### 一、数据模型分析阶段
-##### 1.实体关系模型
-##### 2.数据项模型
+##### 1.关键事件
+* 获取容器: 通过funcName获取已存在的容器
+* 创建容器: 通过nodeId获取已存在的node
+* 清理节点: 通过nodeId获取node
+* 清理容器: 通过nodeId获取node上的容器
+* 扩容容器: 通过funcName获取函数配置信息(内存大小)
+* 扩容节点: 申请新的节点
+##### 2.实体关系模型
+(1) 初步推导出实体关系模型
+
+![实体关系模型一](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_01.png)
+(2) 因为需求功能无需func和node间的关联关系,故精简实体关系模型
+
+![实体关系模型二](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_02.png)
+##### 3.数据项模型
+(1) 理想的数据项与实体关系模型
+
+![理想的数据项与实体关系模型](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/ideal_data_model.png)
+
+(2) faas的数据项模型
+
+![faas的数据项模型](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/data_item_model_01.png)
+
 #### 二、数据模型设计阶段
 ##### 1.数据项模型优化
-##### 2.dao层设计
+(1) 为了简化系统逻辑,减少关联表查询。对container表做冗余操作。冗余node字段,以实现返回addr和port数据和序号优先;冗余func字段,以实现请求时直接映射到目标容器集,以及请求返回超时时自动释放容器。
+
+![faas的新数据项模型](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/data_item_model_02.png)
+
+![实体关系模型三](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_03.png)
+
+##### 2.仓储层设计
+(1) 面向人的接口规格设计(面向意图)
+
+![数据访问层设计](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/repository_model.png)
 #### 三、数据模型实现阶段
 ##### 1.ORM映射
-##### 2.红线
-> 技术代码与业务代码分离
+##### 2.分层
+##### 3.红线
+* 技术代码与业务代码分离
+* 严格准守分层
+* 功能相关的逻辑尽量收敛在业务代码
 
-> 严格准守分层
+### 总结
 
-> 功能相关的逻辑尽量收敛在业务代码
-
+* 持久化对象就是数据表的映射,并合理处理数据表之间的关系
+* 数据访问对象负责与数据库的交互
+* 服务利用事务脚本组织业务过程
 
 ### MDD(度量驱动开发)
 #### 一、性能指标
 #### 二、业务指标
 
 ### TDD
+
+### 推荐
+Martin Fowler: 《企业应用架构模式》
+阿里巴巴: 《码出高效》
+
+
+
+### 技术栈
+本项目的开发基于Java语言进行开发，具体环境包括：
+
+```
+Java: Java 8+
+Maven: 3
+Spring Boot: 2.2.7.RELEASE
+MyBatis: (跟Spring Boot)
+HikariCp: (跟Spring Boot)
+H2: (跟Spring Boot)
+Flywaydb: (跟Spring Boot)
+Grpc: 2.9.0.RELEASE
+```
+
+我个人更喜欢用MyBatis。因为使用这种半自动ORM框架能更好的解耦"技术代码"。并且依赖Idea的插件。大部分代码都可以简便的生成,实际的开发效率并不弱于其他全自动的ORM框架。全自动ORM框架或多或少都有一定"技术代码"耦合,在将来变更时会比较被动,且不符合我个人对代码的追求。
+
+在《领域驱动设计与模式实战》一书中，Jimmy Nilsson 总结了如下特征，他认为这些特征违背了持久化透明的原则:
+
+* 从特定的基类（Object 除外）进行继承
+* 只通过提供的工厂进行实例化
+* 使用专门提供的数据类型实现特定接口
+* 提供专门的构造方法
+* 提供必需的特定字段
+* 避免某些结构或强制使用某些结构

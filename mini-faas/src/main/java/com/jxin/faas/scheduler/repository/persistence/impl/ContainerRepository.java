@@ -57,9 +57,10 @@ public class ContainerRepository implements IContainerRepository {
     }
 
     @Override
-    public void enableContainer(String containerId) {
+    public void enableContainer(String containerId, Date outTime) {
         final Container container = new Container();
         container.setEnabled(true);
+        container.setOuttime(outTime);
         containerMapper.updateByContainerId(container, containerId);
     }
 
@@ -78,12 +79,7 @@ public class ContainerRepository implements IContainerRepository {
         if(container == null){
             return Optional.empty();
         }
-        final Container useContainer = new Container();
-        useContainer.setId(container.getId());
-        useContainer.setOuttime(outTime);
-        useContainer.setEnabled(true);
-
-        containerMapper.updateByPrimaryKey(useContainer);
+        enableContainer(container.getContainerId(), outTime);
         return Optional.of(container);
     }
 

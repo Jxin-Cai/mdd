@@ -30,7 +30,7 @@ public interface INodeRepository {
     void update(Node node);
 
     /**
-     * 获取内存充足的可用内存(根据order排序) ,并使用(扣减内存)
+     * 获取内存充足的可用节点(根据order排序) ,并使用(扣减内存)
      * @param  memSize 内存大小
      * @param  cpuRate cpu使用比例大小
      * @return 资源充足的 node 节点 do 列表
@@ -47,8 +47,8 @@ public interface INodeRepository {
 
     /**
      *
-     * 获取所有节点 Id
-     * @return 所有节点 Id
+     * 获取所有节点 Id 列表
+     * @return 节点 Id 列表
      */
     List<String> nodeIdList();
 }
