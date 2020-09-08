@@ -71,6 +71,7 @@ data-mdd分支是数据模型驱动设计的实现。当前项目题材是[首�
 (1) 初步推导出实体关系模型
 
 ![实体关系模型一](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_01.png)
+
 (2) 因为需求功能无需func和node间的关联关系,故精简实体关系模型
 
 ![实体关系模型二](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_02.png)
@@ -85,9 +86,14 @@ data-mdd分支是数据模型驱动设计的实现。当前项目题材是[首�
 
 #### 二、数据模型设计阶段
 ##### 1.数据项模型优化
-(1) 为了简化系统逻辑,减少关联表查询。对container表做冗余操作。冗余node字段,以实现返回addr和port数据和序号优先;冗余func字段,以实现请求时直接映射到目标容器集,以及请求返回超时时自动释放容器。
+(1) <冗余字段>为了简化系统逻辑,减少关联表查询。对container表做冗余操作。冗余node字段,以实现返回addr和port数据和序号优先;冗余func字段,以实现请求时直接映射到目标容器集,以及请求返回超时时自动释放容器。
 
 ![faas的新数据项模型](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/data_item_model_02.png)
+
+(2) <减少关联>冗余后,实体关系模型也发生了变化。container的所有功能无需再关联另外两张表实现。三张表无需再存在关联关系。
+* container负责核心调度逻辑的业务
+* node在需要新增container时提供持有的nodeInfo
+* func在需要扩容某个func的container时,提供funcInfo
 
 ![实体关系模型三](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_03.png)
 
