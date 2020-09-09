@@ -11,6 +11,7 @@
 
     <groupId>com.jxin</groupId>
     <artifactId>data-model</artifactId>
+    <packaging>pom</packaging>
     <modules>
         <module>mini-faas</module>
     </modules>

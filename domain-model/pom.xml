@@ -11,6 +11,6 @@
 
     <groupId>com.jxin</groupId>
     <artifactId>domain-model</artifactId>
-
+    <packaging>pom</packaging>
 
 </project>
