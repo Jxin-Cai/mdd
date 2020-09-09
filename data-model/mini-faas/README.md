@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/Jxin-Cai/mdd.svg?branch=data-mdd)](https://travis-ci.org/Jxin-Cai/mdd)
-[![codecov](https://codecov.io/gh/Jxin-Cai/mdd/branch/data-mdd/graph/badge.svg)](https://codecov.io/gh/Jxin-Cai/mdd/)
 ### 项目介绍
 
 data-mdd分支是数据模型驱动设计的实现。当前项目题材是[首届云原生编程挑战赛(复赛)](https://code.aliyun.com/middleware-contest-2020/mini-faas)。
