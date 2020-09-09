@@ -13,7 +13,8 @@
         <name>jxin</name>
     </organization>
     <modules>
-        <module>mini-faas</module>
+        <module>data-model</module>
+        <module>domain-model</module>
     </modules>
 
 
