@@ -1,9 +1,9 @@
-### 项目介绍
+### 一、项目介绍
 
 data-mdd分支是数据模型驱动设计的实现。当前项目题材是[首届云原生编程挑战赛(复赛)](https://code.aliyun.com/middleware-contest-2020/mini-faas)。
 
 
-### 需求描述
+### 二、需求描述
 
 一个简化的FaaS系统分为APIServer，Scheduler，ResourceManager，NodeService，ContainerService 5个组件，本题目中APIServer，ResourceManager，NodeService，ContainerService由平台提供，Scheduler的```AcquireContainer```和```ReturnContainer```API由选手实现（gRPC服务，语言不限），在本赛题中Scheduler```无需考虑分布式多实例问题，Scheduler以容器方式单实例运行```。
 
@@ -55,17 +55,17 @@ data-mdd分支是数据模型驱动设计的实现。当前项目题材是[首�
 2. 当Client调用同一个函数时，APIServer调用Scheduler获得执行函数所需要的Container，Scheduler发现已经为该函数创建过Container，所以直接将Node地址和Container信息返回给APIServer，之后的调用步骤与上面的场景一致。注意：如果APIServer在尚未将Container归还给Scheduler时，Scheduler是否可以将该Container返回给APIServer呢？一般来说，这取决于这个Container是否有资源来处理多个请求。这是Scheduler需要探索的地方之一。
 3. 当Client调用另一个函数时，APIServer调用Scheduler获得执行函数所需要的Container，Scheduler发现该函数没有可用的Container，但是Node上还可以创建更多的Container，因此它调用NodeService为这个函数创建新的Container，并返回Node地址和Container信息给APIServer，之后的调用步骤与上面的场景一致。
 
-### 数据模型驱动设计
+### 三、数据模型驱动设计
 
-#### 一、数据模型分析阶段
-##### 1.关键事件
+#### 1.分析阶段
+##### 1.1关键事件
 * 获取容器: 通过funcName获取已存在的容器
 * 创建容器: 通过nodeId获取已存在的node
 * 清理节点: 通过nodeId获取node
 * 清理容器: 通过nodeId获取node上的容器
 * 扩容容器: 通过funcName获取函数配置信息(内存大小)
 * 扩容节点: 申请新的节点
-##### 2.实体关系模型
+##### 1.2.实体关系模型
 (1) 初步推导出实体关系模型
 
 <img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_01.png" height="350" width="500" alt="实体关系模型一">
@@ -74,7 +74,7 @@ data-mdd分支是数据模型驱动设计的实现。当前项目题材是[首�
 
 <img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_02.png" height="350" width="500" alt="理想的数据项与实体关系模型">
 
-##### 3.数据项模型
+##### 1.3.数据项模型
 (1) 理想的数据项与实体关系模型
 
 <img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/ideal_data_model.png" height="350" width="500" alt="理想的数据项与实体关系模型">
@@ -84,8 +84,8 @@ data-mdd分支是数据模型驱动设计的实现。当前项目题材是[首�
 <img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/data_item_model_01.png" height="350" width="500" alt="faas的新数据项模型">
 
 
-#### 二、数据模型设计阶段
-##### 1.数据项模型优化
+#### 2.设计阶段
+##### 2.1.数据项模型优化
 (1) <冗余字段>为了简化系统逻辑,减少关联表查询。对container表做冗余操作。冗余node字段,以实现返回addr和port数据和序号优先;冗余func字段,以实现请求时直接映射到目标容器集,以及请求返回超时时自动释放容器。
 
 <img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/data_item_model_02.png" height="350" width="500" alt="faas的新数据项模型">
@@ -98,15 +98,15 @@ data-mdd分支是数据模型驱动设计的实现。当前项目题材是[首�
 
 <img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_03.png" height="350" width="500">
 
-##### 2.仓储层设计
+##### 2.2.仓储层设计
 (1) 面向人的接口规格设计(面向意图)
 
 <img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/repository_model.png" height="350" width="500">
 
-#### 三、数据模型实现阶段
-##### 1.ORM映射
+#### 3.实现阶段
+##### 3.1.ORM映射
 ORM框架的选型+Ide插件的使用。本案例使用的是: mybatis+[MyBatisCodeHelperPro](https://gejun123456.github.io/MyBatisCodeHelper-Pro/)
-##### 2.分层
+##### 3.2.分层
 
 (1)当前项目的分层结构
 ```
@@ -143,38 +143,19 @@ ORM框架的选型+Ide插件的使用。本案例使用的是: mybatis+[MyBatisC
 (3)加一层
 
 **加一层可以实现依赖的解耦**,软件系统的复杂性没有什么是加一层解决不了的,如果有就再加一层。
-##### 3.红线
+##### 3.3.红线
 * 技术代码与业务代码分离
 * 严格准守分层
 * 功能相关的逻辑尽量收敛在业务代码
 
-### 总结
+### 四、总结
 
 * 持久化对象就是数据表的映射,并合理处理数据表之间的关系
 * 数据访问对象负责与数据库的交互
 * 服务利用事务脚本组织业务过程
 
-### MDD(度量驱动开发)
 
-精益创业模型
-
-<img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/lean_startup.jpg" height="350" width="500">
-
-#### 一、性能指标
-* 并发量
-* 响应耗时
-* 成功率
-* 资源(cpu,内存,磁盘,带宽)占用情况
-#### 二、业务指标
-* 根据具体业务情况
-
-
-### TDD
-* 在代码层次，在编码之前写测试脚本，可以称为单元测试驱动开发
-* 在业务层次，在需求分析时就确定需求（如用户故事）的**验收标准**
-
-
-### 技术栈
+### 五、技术栈
 本项目的开发基于Java语言进行开发，具体环境包括：
 
 ```
@@ -200,6 +181,6 @@ Grpc: 2.9.0.RELEASE
 * 避免某些结构或强制使用某些结构
 
 
-### 推荐
+### 六、推荐
 * Martin Fowler: 《企业应用架构模式》
 * 阿里巴巴: 《码出高效》
