@@ -1,6 +1,7 @@
 package com.jxin.faas.scheduler;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
@@ -145,7 +146,6 @@ public class EasyTest {
         final Map<String, Node> nodeStatMap = Maps.newHashMap();
         nodeStatMap.put("a1a1", new Node());
         System.out.println( MapUtil.join(nodeStatMap, StrUtil.COMMA, StrUtil.COLON, true));
-
     }
 
     public void testSys(){

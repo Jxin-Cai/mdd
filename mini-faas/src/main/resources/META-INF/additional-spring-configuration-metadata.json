@@ -51,55 +51,55 @@
     {
       "name": "executors",
       "type": "java.util.List",
-      "sourceType": "com.jxin.faas.scheduler.infrastructure.executor.properties.ExecutorProperties",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.executor.properties.ExecutorProperties",
       "description": "线程池实例配置列表."
     },
     {
       "name": "dbs.faas.url",
       "type": "java.lang.String",
-      "sourceType": "com.jxin.faas.scheduler.infrastructure.db.type.mybatis.properties.DbProperties",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.DbProperties",
       "description": "db-url."
     },
     {
       "name": "dbs.faas.username",
       "type": "java.lang.String",
-      "sourceType": "com.jxin.faas.scheduler.infrastructure.db.type.mybatis.properties.DbProperties",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.DbProperties",
       "description": "db-username."
     },
     {
       "name": "dbs.faas.password",
       "type": "java.lang.String",
-      "sourceType": "com.jxin.faas.scheduler.infrastructure.db.type.mybatis.properties.DbProperties",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.DbProperties",
       "description": "db-password."
     },
     {
       "name": "dbs.faas.mybatis.configLocation",
       "type": "java.lang.String",
-      "sourceType": "com.jxin.faas.scheduler.infrastructure.db.type.mybatis.properties.MybatisProperties",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.MybatisProperties",
       "description": "mybatis的sqlMapConfig.xml地址."
     },
     {
       "name": "dbs.faas.mybatis.mapperLocations",
       "type": "java.lang.String",
-      "sourceType": "com.jxin.faas.scheduler.infrastructure.db.type.mybatis.properties.MybatisProperties",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.MybatisProperties",
       "description": "mybatis的mapper.xml地址."
     },
     {
       "name": "dbs.faas.mybatis.mapperScanner",
       "type": "java.lang.String",
-      "sourceType": "com.jxin.faas.scheduler.infrastructure.db.type.mybatis.properties.MybatisProperties",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.MybatisProperties",
       "description": "mybatis的mapperApi地址."
     },
     {
       "name": "dbs.faas.pool.maximumPoolSize",
       "type": "java.lang.Integer",
-      "sourceType": "com.jxin.faas.scheduler.infrastructure.db.type.mybatis.properties.JdbcPoolConfigProperties",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.JdbcPoolConfigProperties",
       "description": "连接池的最大值."
     },
     {
       "name": "dbs.faas.pool.driverClassName",
       "type": "java.lang.String",
-      "sourceType": "com.jxin.faas.scheduler.infrastructure.db.type.mybatis.properties.JdbcPoolConfigProperties",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.JdbcPoolConfigProperties",
       "description": "驱动名称."
     }
 

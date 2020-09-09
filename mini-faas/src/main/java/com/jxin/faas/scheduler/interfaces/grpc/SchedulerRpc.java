@@ -3,7 +3,7 @@ package com.jxin.faas.scheduler.interfaces.grpc;
 import com.jxin.faas.scheduler.infrastructure.util.IJsonUtil;
 import com.jxin.faas.scheduler.repository.table.Container;
 import com.jxin.faas.scheduler.repository.table.Func;
-import com.jxin.faas.scheduler.service.ISchedulerService;
+import com.jxin.faas.scheduler.service.api.ISchedulerService;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;

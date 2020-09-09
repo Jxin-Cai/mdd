@@ -4,7 +4,7 @@ import com.jxin.faas.scheduler.infrastructure.util.IdUtil;
 import com.jxin.faas.scheduler.repository.persistence.IContainerRepository;
 import com.jxin.faas.scheduler.repository.persistence.INodeRepository;
 import com.jxin.faas.scheduler.repository.table.Node;
-import com.jxin.faas.scheduler.service.INodeManager;
+import com.jxin.faas.scheduler.service.api.INodeManager;
 import com.jxin.faas.scheduler.service.acl.nodeservice.INodeServiceAcl;
 import com.jxin.faas.scheduler.service.acl.resourcemanager.IResourceManagerAcl;
 import com.jxin.faas.scheduler.service.entity.NodeStatVal;

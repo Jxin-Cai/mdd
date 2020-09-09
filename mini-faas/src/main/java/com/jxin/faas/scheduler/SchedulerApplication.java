@@ -1,11 +1,10 @@
 package com.jxin.faas.scheduler;
 
-import com.jxin.faas.scheduler.infrastructure.db.annotation.EnableMutilDb;
-import com.jxin.faas.scheduler.infrastructure.db.consts.PersistentTypeEnum;
+import com.jxin.faas.scheduler.infrastructure.plug.db.annotation.EnableMutilDb;
+import com.jxin.faas.scheduler.infrastructure.plug.db.consts.PersistentTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 

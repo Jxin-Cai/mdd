@@ -70,40 +70,81 @@ data-mdd分支是数据模型驱动设计的实现。当前项目题材是[首�
 ##### 2.实体关系模型
 (1) 初步推导出实体关系模型
 
-![实体关系模型一](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_01.png)
+<img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_01.png" height="350" width="500" alt="实体关系模型一">
 
 (2) 因为需求功能无需func和node间的关联关系,故精简实体关系模型
 
-![实体关系模型二](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_02.png)
+<img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_02.png" height="350" width="500" alt="理想的数据项与实体关系模型">
+
 ##### 3.数据项模型
 (1) 理想的数据项与实体关系模型
 
-![理想的数据项与实体关系模型](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/ideal_data_model.png)
+<img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/ideal_data_model.png" height="350" width="500" alt="理想的数据项与实体关系模型">
 
 (2) faas的数据项模型
 
-![faas的数据项模型](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/data_item_model_01.png)
+<img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/data_item_model_01.png" height="350" width="500" alt="faas的新数据项模型">
+
 
 #### 二、数据模型设计阶段
 ##### 1.数据项模型优化
 (1) <冗余字段>为了简化系统逻辑,减少关联表查询。对container表做冗余操作。冗余node字段,以实现返回addr和port数据和序号优先;冗余func字段,以实现请求时直接映射到目标容器集,以及请求返回超时时自动释放容器。
 
-![faas的新数据项模型](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/data_item_model_02.png)
+<img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/data_item_model_02.png" height="350" width="500" alt="faas的新数据项模型">
+
 
 (2) <减少关联>冗余后,实体关系模型也发生了变化。container的所有功能无需再关联另外两张表实现。三张表无需再存在关联关系。
 * container负责核心调度逻辑的业务
 * node在需要新增container时提供持有的nodeInfo
 * func在需要扩容某个func的container时,提供funcInfo
 
-![实体关系模型三](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_03.png)
+<img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/entity_relation_model_03.png" height="350" width="500">
 
 ##### 2.仓储层设计
 (1) 面向人的接口规格设计(面向意图)
 
-![数据访问层设计](https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/repository_model.png)
+<img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/repository_model.png" height="350" width="500">
+
 #### 三、数据模型实现阶段
 ##### 1.ORM映射
+ORM框架的选型+Ide插件的使用。本案例使用的是: mybatis+[MyBatisCodeHelperPro](https://gejun123456.github.io/MyBatisCodeHelper-Pro/)
 ##### 2.分层
+
+(1)当前项目的分层结构
+```
+|--scheduler
+|  |--infrastructure(基础层)
+|  |  |--aop(aop)
+|  |  |--health(健康检查)
+|  |  |--interceptor(拦截器)
+|  |  |--listener(监听器)
+|  |  |--plug(外部插件)
+|  |  |--util(工具)
+|  |--interfaces(接入层)
+|  |  |--acl(防腐层实现)
+|  |  |--grpc(grpc)
+|  |  |--job(定时任务)
+|  |  |--proto(grpc的proto文件)
+|  |--repository(仓储层)
+|  |  |--mapper(dao)
+|  |  |--persistence(持久层)
+|  |  |--table(data object)
+|  |--service(服务层)
+|  |  |--acl(防腐层接口)
+|  |  |--entity(值对象)
+|  |  |--exec(异常)
+|  |  |--impl(实现)
+|  |  |--api(接口)
+```
+
+(2)对分层的理解
+
+* **why**: 分层并不是一个特别符合直觉的做法,符合直觉的做法应该是都写在一起。那为什么要分层呢?对于一切都混在一起的代码,当规模达到一定程度,人们维护代码的难度就急剧上升。添加功能时,要顾及的面很广,导致心智负担很重;找问题时,更形同“大海捞针”,难以理清头绪。
+* **how**: 分层的本质是一种在设计上的分解。首先,要做**好关注点的分离**。从垂直方向看软件代码,按照对外交互、业务逻辑、技术组件依赖等等,将系统的代码分隔开来,保证各层关注点的纯粹;接着,要**构建良好的抽象/模型**。为了满足各层间的交互以及各自复杂性的隔离,就需要构建良好的抽象(方法命名面向意图而非实现,交互对象根据不同视图做不同切分)。
+
+(3)加一层
+
+**加一层可以实现依赖的解耦**,软件系统的复杂性没有什么是加一层解决不了的,如果有就再加一层。
 ##### 3.红线
 * 技术代码与业务代码分离
 * 严格准守分层
@@ -116,15 +157,23 @@ data-mdd分支是数据模型驱动设计的实现。当前项目题材是[首�
 * 服务利用事务脚本组织业务过程
 
 ### MDD(度量驱动开发)
+
+精益创业模型
+
+<img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/lean_startup.jpg" height="350" width="500">
+
 #### 一、性能指标
+* 并发量
+* 响应耗时
+* 成功率
+* 资源(cpu,内存,磁盘,带宽)占用情况
 #### 二、业务指标
+* 根据具体业务情况
+
 
 ### TDD
-
-### 推荐
-Martin Fowler: 《企业应用架构模式》
-阿里巴巴: 《码出高效》
-
+* 在代码层次，在编码之前写测试脚本，可以称为单元测试驱动开发
+* 在业务层次，在需求分析时就确定需求（如用户故事）的**验收标准**
 
 
 ### 技术栈
@@ -141,7 +190,7 @@ Flywaydb: (跟Spring Boot)
 Grpc: 2.9.0.RELEASE
 ```
 
-我个人更喜欢用MyBatis。因为使用这种半自动ORM框架能更好的解耦"技术代码"。并且依赖Idea的插件。大部分代码都可以简便的生成,实际的开发效率并不弱于其他全自动的ORM框架。全自动ORM框架或多或少都有一定"技术代码"耦合,在将来变更时会比较被动,且不符合我个人对代码的追求。
+我个人更喜欢用MyBatis。因为使用这种半自动ORM框架能更好的解耦"技术代码"。并且,依赖Idea的插件,大部分代码都可以简便的生成,实际的开发效率并不弱于其他全自动的ORM框架。全自动ORM框架或多或少都有一定"技术代码"耦合,在将来变更时会比较被动,且不符合我个人对代码整洁的追求。
 
 在《领域驱动设计与模式实战》一书中，Jimmy Nilsson 总结了如下特征，他认为这些特征违背了持久化透明的原则:
 
@@ -151,3 +200,36 @@ Grpc: 2.9.0.RELEASE
 * 提供专门的构造方法
 * 提供必需的特定字段
 * 避免某些结构或强制使用某些结构
+
+### 能力评估模型
+
+引用下张逸大佬的能力评估模型:
+
+#### 1.敏捷迭代能力
+| 等级 | 团队 | 需求 |过程|
+| --- | --- | --- |--- |
+| 初级 | 组件团队，缺乏定期的交流制度 | 没有清晰的需求管理体系 | 每个版本的开发周期长，无法快速响应需求的变化 |
+| 中级 | 全功能的特性团队，每日站立会议 | 定义了产品待办项和迭代待办项 | 采用了迭代开发，定期交付小版本 |
+| 高级 | 自组织的特性团队，团队成员定期轮换，形成知识共享 | 建立了故事地图、建立了史诗故事、特性与用户故事的需求体系 | 建立了可视化的看板，由下游拉动需求的开发，消除浪费 |
+#### 2.领域建模能力
+| 等级 | 建模方式 |
+| --- | --- |
+| 初级 | 采用数据建模，建立以数据表关系为基础的数据模型 |
+| 中级 | 采用领域建模，建模工作只限于少数资深技术人员，并凭借经验完成建模  |
+| 高级 | 采用事件风暴、四色建模等建模方法，由领域专家与开发团队一起围绕核心子领域开展领域建模 |
+#### 3.架构设计能力
+| 等级 | 架构 | 设计 |
+| --- | --- | --- |
+| 初级 | 采用传统三层架构，未遵循整洁架构，整个系统缺乏清晰的边界 | 采用贫血领域模型，业务逻辑主要以事务脚本实现 | 
+| 中级 | 领域层作为分层架构的独立一层，并为领域层划分了模块 | 采用了富领域模型，遵循面向对象设计思想，但未明确定义聚合和资源库 |
+| 高级 | 建立了系统层次与限界上下文层次的系统架构，遵循了整洁架构，建立了清晰的限界上下文与领域层边界 | 建立了以聚合为核心的领域设计模型，职责合理地分配给聚合、资源库与领域服务 |
+#### 4.整洁编码能力
+| 等级 | 编码 | 自动化测试 |
+| --- | --- | --- |
+| 初级 | 编码以实现功能为唯一目的 | 没有任何自动化测试 | 
+| 中级 | 方法和类的命名都遵循了统一语言，可读性高 | 为核心的领域产品代码提供了单元测试 |
+| 高级 | 采用测试驱动开发编写领域代码，遵循简单设计原则 | 具有明确的测试战略，单元测试先行 |
+
+### 推荐
+* Martin Fowler: 《企业应用架构模式》
+* 阿里巴巴: 《码出高效》

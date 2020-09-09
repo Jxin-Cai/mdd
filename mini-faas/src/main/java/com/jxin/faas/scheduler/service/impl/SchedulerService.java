@@ -5,9 +5,9 @@ import com.jxin.faas.scheduler.repository.persistence.IContainerRepository;
 import com.jxin.faas.scheduler.repository.persistence.IFuncRepository;
 import com.jxin.faas.scheduler.repository.table.Container;
 import com.jxin.faas.scheduler.repository.table.Func;
-import com.jxin.faas.scheduler.service.IContainerManager;
-import com.jxin.faas.scheduler.service.INodeManager;
-import com.jxin.faas.scheduler.service.ISchedulerService;
+import com.jxin.faas.scheduler.service.api.IContainerManager;
+import com.jxin.faas.scheduler.service.api.INodeManager;
+import com.jxin.faas.scheduler.service.api.ISchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.jxin.faas.scheduler.interfaces.job;
 
-import com.jxin.faas.scheduler.service.IContainerManager;
-import com.jxin.faas.scheduler.service.INodeManager;
+import com.jxin.faas.scheduler.service.api.IContainerManager;
+import com.jxin.faas.scheduler.service.api.INodeManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
