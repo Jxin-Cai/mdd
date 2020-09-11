@@ -1,0 +1,114 @@
+// Protocol for nodeservice.
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+package nodeservoceproto;
+option java_outer_classname = "NodeServiceProto";
+
+service NodeService {
+    rpc Reserve (ReserveRequest) returns (ReserveReply) {
+    }
+    rpc CreateContainer (CreateContainerRequest) returns (CreateContainerReply) {
+    }
+    rpc RemoveContainer (RemoveContainerRequest) returns (RemoveContainerReply) {
+    }
+    rpc InvokeFunction (InvokeFunctionRequest) returns (stream InvokeFunctionReply) {
+    }
+    rpc GetStats (GetStatsRequest) returns (GetStatsReply) {
+    }
+}
+
+message ReserveRequest {
+    string request_id = 1;
+    string owner_account_id=2;
+}
+
+message ReserveReply {
+}
+
+message FunctionMeta {
+    string function_name = 1;
+    string handler = 2;
+    int64 timeout_in_ms = 3;
+    int64 memory_in_bytes = 4;
+}
+
+message CreateContainerRequest {
+    string request_id = 1;
+    string name = 2; // container name
+    FunctionMeta function_meta = 3;
+}
+
+message CreateContainerReply {
+    string container_id = 1;
+}
+
+message RemoveContainerRequest {
+    string request_id = 1;
+    string container_id = 2;
+}
+
+message RemoveContainerReply {
+}
+
+message InvokeFunctionRequest {
+    string request_id = 1;
+    string container_id = 2;
+    bytes event = 3;
+    FunctionMeta function_meta = 4;
+}
+
+message InvokeFunctionReply {
+    bytes body = 1;
+
+    message Header {
+        bytes error = 1;
+        bool handled = 2;
+        string status_code = 3;
+        message Value {
+            repeated string items = 1;
+        }
+        map<string, Value> headers = 4;
+        int64 max_mem_usage_in_bytes = 5;
+        string function_log = 6;
+    }
+
+    message Footer {
+        int64 duration_in_nanos = 1;
+        string invoke_exception = 2;
+        string error = 3;
+    }
+
+    Header header = 2;
+    Footer footer = 3;
+}
+
+message NodeStats {
+    int64 total_memory_in_bytes = 1;
+    int64 memory_usage_in_bytes = 2;
+    int64 available_memory_in_bytes = 3;
+    double cpu_usage_pct = 4;
+    int64 disk_total_in_bytes = 5;
+    int64 disk_avail_in_bytes = 6;
+    int64 disk_total_inodes = 7;
+    int64 disk_free_inodes = 8;
+}
+
+message ContainerStats {
+    string container_id = 1;
+    int64 total_memory_in_bytes = 2;
+    int64 memory_usage_in_bytes = 3;
+    double cpu_usage_pct = 4;
+}
+
+message GetStatsRequest {
+    string request_id = 1;
+}
+
+message GetStatsReply {
+    NodeStats node_stats = 1;
+    repeated ContainerStats container_stats_list = 2;
+    string live_id = 3;
+    string owner_account_id = 4;
+}

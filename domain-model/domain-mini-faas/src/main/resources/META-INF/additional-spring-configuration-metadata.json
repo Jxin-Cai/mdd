@@ -1,0 +1,107 @@
+{
+  "properties": [
+    {
+      "name": "nodeManager.maxCpuUsageRatio",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 85,
+      "description": "node节点的cpu最大使用比例."
+    },
+    {
+      "name": "nodeManager.maxMemUsageRatio",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 0.85,
+      "description": "node节点的内存最大使用比例."
+    },
+    {
+      "name": "nodeManager.scaleCount",
+      "type": "java.lang.Integer",
+      "defaultValue": 2,
+      "description": "node节点的扩容数量."
+    },
+    {
+      "name": "nodeManager.maxCpuRate",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 150,
+      "description": "node最大cpu使用率."
+    },
+    {
+      "name": "containerManager.maxCpuUsageRatio",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 85,
+      "description": "容器的CPU最大使用比例."
+    },
+    {
+      "name": "containerManager.maxMemUsageRatio",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 0.85,
+      "description": "容器的内存最大使用比例."
+    },
+    {
+      "name": "containerManager.maxDelayCleanTime",
+      "type": "java.lang.Integer",
+      "defaultValue": 2,
+      "description": "容器最大延后清理的时间(s)."
+    },
+    {
+      "name": "containerManager.expandDivisor",
+      "type": "java.math.BigDecimal",
+      "defaultValue": 2,
+      "description": "容器扩容的增长系数."
+    },
+    {
+      "name": "executors",
+      "type": "java.util.List",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.executor.properties.ExecutorProperties",
+      "description": "线程池实例配置列表."
+    },
+    {
+      "name": "dbs.faas.url",
+      "type": "java.lang.String",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.DbProperties",
+      "description": "db-url."
+    },
+    {
+      "name": "dbs.faas.username",
+      "type": "java.lang.String",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.DbProperties",
+      "description": "db-username."
+    },
+    {
+      "name": "dbs.faas.password",
+      "type": "java.lang.String",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.DbProperties",
+      "description": "db-password."
+    },
+    {
+      "name": "dbs.faas.mybatis.configLocation",
+      "type": "java.lang.String",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.MybatisProperties",
+      "description": "mybatis的sqlMapConfig.xml地址."
+    },
+    {
+      "name": "dbs.faas.mybatis.mapperLocations",
+      "type": "java.lang.String",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.MybatisProperties",
+      "description": "mybatis的mapper.xml地址."
+    },
+    {
+      "name": "dbs.faas.mybatis.mapperScanner",
+      "type": "java.lang.String",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.MybatisProperties",
+      "description": "mybatis的mapperApi地址."
+    },
+    {
+      "name": "dbs.faas.pool.maximumPoolSize",
+      "type": "java.lang.Integer",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.JdbcPoolConfigProperties",
+      "description": "连接池的最大值."
+    },
+    {
+      "name": "dbs.faas.pool.driverClassName",
+      "type": "java.lang.String",
+      "sourceType": "com.jxin.faas.scheduler.infrastructure.plug.db.type.mybatis.properties.JdbcPoolConfigProperties",
+      "description": "驱动名称."
+    }
+
+  ]
+}

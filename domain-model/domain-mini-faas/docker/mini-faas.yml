@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  pilotset:
+    image: registry.cn-hangzhou.aliyuncs.com/jxin/grb:v1
+    ports:
+      - 10600:10600
+

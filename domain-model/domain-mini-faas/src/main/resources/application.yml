@@ -1,0 +1,91 @@
+server:
+  port: 80
+  servlet:
+    context-path: /faas
+
+spring:
+  application:
+    name: faas-scheduler
+  h2:
+    console:
+      ## 开启h2 console跟踪,方便调试,默认 false
+      enabled: true
+      settings:
+        ## 开启h2 console 跟踪 方便调试  默认 false
+        trace: true
+        ## 允许console 远程访问 默认false
+        web-allow-others: true
+      path: /h2
+  flyway:
+    ## 是否启用flyway
+    enabled: true
+    ## 迁移sql脚本文件存放路径,默认db/migration
+    locations: classpath:db/migration
+    ## 迁移sql脚本文件名称的前缀，默认V
+    sql-migration-prefix: V
+    ## 迁移sql脚本文件名称的分隔符,默认2个下划线__
+    sql-migration-separator: __
+    ## 迁移sql脚本文件名称的后缀
+    sql-migration-suffixes: .sql
+    ## 迁移时是否进行校验，默认true
+    validate-on-migrate: true
+    ## 设置为true,当迁移发现数据库非空且存在没有元数据的表时,自动执行基准迁移,新建schema_version表
+    baseline-on-migrate: true
+  #数据库连接配置
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:faas;DB_CLOSE_DELAY=1000;MODE=MySQL;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+
+log4jdbc:
+
+
+dbs:
+  faas:
+    url: jdbc:h2:mem:faas;DB_CLOSE_DELAY=1000;MODE=MySQL;DATABASE_TO_LOWER=TRUE
+    username: sa
+    password:
+    mybatis:
+      configLocation: sqlMapConfig.xml
+      mapperLocations: classpath:mapper/*.xml
+      mapperScanner: com.jxin.faas.scheduler.domain.container.repository.mapper;com.jxin.faas.scheduler.domain.func.repository.mapper;com.jxin.faas.scheduler.domain.node.repository.mapper
+    pool:
+      driverClassName: org.h2.Driver
+      maximumPoolSize: 200
+
+
+grpc:
+  server:
+    port: 10600
+
+
+nodeManager:
+  maxCpuUsageRatio: 130
+  maxMemUsageRatio: 0.75
+  maxCpuRate: 150
+  scaleCount: 1
+
+containerManager:
+  maxCpuUsageRatio: 75
+  maxMemUsageRatio: 0.75
+  maxDelayCleanTime: 15
+  expandDivisor: 2
+
+
+executors:
+  - id: refreshExecutor
+    corePoolSize: 3
+    maxPoolSize: 20
+    queueCapacity: 100
+    keepAlive: 300
+  - id: cleanExecutor
+    corePoolSize: 3
+    maxPoolSize: 150
+    queueCapacity: 10000
+    keepAlive: 300
+  - id: scaleExecutor
+    corePoolSize: 8
+    maxPoolSize: 20
+    queueCapacity: 100
+    keepAlive: 300
