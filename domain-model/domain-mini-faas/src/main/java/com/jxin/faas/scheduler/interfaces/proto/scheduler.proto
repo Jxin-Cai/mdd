@@ -1,0 +1,52 @@
+// This file defines the model of the server request/response object.
+// Both client and server will follow the defined model to communicate.
+//
+// We are using protoc to covert this file into the actual golang model.
+// Follow the below link to see more about how it works.
+//
+// http://www.grpc.io/docs/quickstart/go.html#install-protocol-buffers-v3
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+package schedulerproto;
+option java_outer_classname = "SchedulerProto";
+
+service Scheduler {
+    rpc AcquireContainer (AcquireContainerRequest) returns (AcquireContainerReply) {
+    }
+    rpc ReturnContainer (ReturnContainerRequest) returns (ReturnContainerReply) {
+    }
+}
+
+message AcquireContainerRequest {
+    string request_id = 1;
+    string account_id = 2;
+    string function_name = 3;
+    FunctionConfig function_config = 4;
+}
+
+message AcquireContainerReply {
+    string node_id = 1;
+    string node_address = 2;
+    int64 node_service_port = 3;
+    string container_id = 4;
+}
+
+message ReturnContainerRequest {
+    string request_id = 1;
+    string container_id = 2;
+    int64 duration_in_nanos = 3;
+    int64 max_memory_usage_in_bytes = 4;
+    string error_code = 5;
+    string error_message = 6;
+}
+
+message ReturnContainerReply {
+}
+
+message FunctionConfig {
+    int64 timeout_in_ms = 1;
+    int64 memory_in_bytes = 2;
+    string handler = 3;
+}

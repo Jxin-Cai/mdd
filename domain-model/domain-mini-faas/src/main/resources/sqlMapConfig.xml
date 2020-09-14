@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!--json 序列化碰到懒加载报错，所以全部改成立即加载-->
+        <!-- 全局性设置懒加载。如果设为‘false'，则所有相关联的都会被初始化加载。 -->
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <!-- 当设置为‘true'的时候，懒加载的对象可能被任何懒属性全部加载。否则，每个属性都按需加载。 -->
+        <setting name="aggressiveLazyLoading" value="false"/>
+        <!-- 所有操作都会返回主键ID给对象-->
+        <setting name="useGeneratedKeys" value="true"/>
+        <!--使用驼峰命名转换字段-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--设置当jdbc的实际类型为空时，指定插入类型为NULL-->
+        <setting name="jdbcTypeForNull" value="NULL"/>
+    </settings>
+
+    <!--	<typeAliases>
+
+
+        </typeAliases>-->
+
+</configuration>

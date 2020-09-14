@@ -96,12 +96,13 @@
     1. [《许式伟的架构课》](https://time.geekbang.org/column/intro/166)
     2. [《软件设计之美》](https://time.geekbang.org/column/intro/313)
     3. [《架构实战案例解析》](https://time.geekbang.org/column/intro/281)
-·    4. [《领域驱动设计实践(战略+战术)》](https://gitbook.cn/gitchat/column/5cdab7fb34b6ed1398fd8de7)
+    4. [《领域驱动设计实践(战略+战术)》](https://gitbook.cn/gitchat/column/5cdab7fb34b6ed1398fd8de7)
     5. [《DDD实战课》](https://time.geekbang.org/column/intro/238)
     6. 《架构整洁之道》
     7. 《架构之美》
     8. 《企业应用架构模式》
     9. 《实现领域驱动设计》
+    10. 《领域驱动设计与模式实战》
     
 * 整洁编码能力: 
     1. [《设计模式之美》](https://time.geekbang.org/column/intro/250)

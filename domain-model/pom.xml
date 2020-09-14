@@ -12,5 +12,8 @@
     <groupId>com.jxin</groupId>
     <artifactId>domain-model</artifactId>
     <packaging>pom</packaging>
+    <modules>
+        <module>domain-mini-faas</module>
+    </modules>
 
 </project>
