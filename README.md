@@ -28,14 +28,10 @@
 
 * 分析阶段(提取): 基于现实世界的业务需求，依据设计者的建模观点对业务知识进行提炼与转换，形成表达了业务规则、业务流程或业务关系的逻辑概念
 * 设计阶段(精炼): 运用软件设计方法进一步提炼与转换分析模型中的逻辑概念，使得模型在满足需求功能的同时满足更高的设计质量
-* 实现阶段(使用): 通过编码对设计模型中的概念进行提炼与转换，构建可以运行的高质量软件，同时满足未来的需求变更与产品维护
+* 实现阶段(翻译): 通过编码对设计模型中的概念进行提炼与转换，构建可以运行的高质量软件，同时满足未来的需求变更与产品维护
 
 
 ### 五、MDD(度量驱动开发/业务)
-
-精益创业模型
-
-<img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/lean_startup.jpg" height="350" width="500">
 
 #### 1.性能指标
 * 并发量
@@ -45,18 +41,24 @@
 #### 2.业务指标
 * 根据具体业务情况
 
+#### 3.精益创业模型
+
+<img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/lean_startup.jpg" height="350" width="500">
 
 ### 六、TDD(测试驱动开发)
 #### 1.简介
-* 在代码层次，在编码之前写测试脚本，可以称为单元测试驱动开发
-* 在业务层次，在需求分析时就确定需求（如用户故事）的**验收标准**
+* 代码层次：在编码之前写测试脚本，可以称为单元测试驱动开发
+* 业务层次：在需求分析时就确定需求（如用户故事）的**验收标准**
 
-#### 2.简单设计原则
+#### 2.基础原则
 * 通过所有测试(Passes its tests)
 * 尽可能消除重复 (Minimizes duplication)
 * 尽可能清晰表达 (Maximizes clarity)
 * 更少代码元素 (Has fewer elements)
 
+#### 3.测试驱动开发模型
+
+<img src="https://raw.githubusercontent.com/Jxin-Cai/photo/master/mdd/data/tdd.jpg" height="350" width="500">
 
 ### 七、能力评估模型
 
@@ -94,11 +96,12 @@
     1. [《许式伟的架构课》](https://time.geekbang.org/column/intro/166)
     2. [《软件设计之美》](https://time.geekbang.org/column/intro/313)
     3. [《架构实战案例解析》](https://time.geekbang.org/column/intro/281)
-    4. [《DDD实战课》](https://time.geekbang.org/column/intro/238)
-    5. 《架构整洁之道》
-    6. 《架构之美》
-    7. 《企业应用架构模式》
-    8. 《实现领域驱动设计》
+·    4. [《领域驱动设计实践(战略+战术)》](https://gitbook.cn/gitchat/column/5cdab7fb34b6ed1398fd8de7)
+    5. [《DDD实战课》](https://time.geekbang.org/column/intro/238)
+    6. 《架构整洁之道》
+    7. 《架构之美》
+    8. 《企业应用架构模式》
+    9. 《实现领域驱动设计》
     
 * 整洁编码能力: 
     1. [《设计模式之美》](https://time.geekbang.org/column/intro/250)
