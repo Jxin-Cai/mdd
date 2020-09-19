@@ -1,6 +1,6 @@
 ### 一、项目介绍
 
-data-model项目是数据模型驱动设计的实现。当前项目题材是[首届云原生编程挑战赛(复赛)](https://code.aliyun.com/middleware-contest-2020/mini-faas)。
+data-model项目是数据模型驱动设计的实现。当前项目题材是[首届云原生编程挑战赛(复赛)](https://tianchi.aliyun.com/competition/entrance/231793/information)。
 
 
 ### 二、需求描述
