@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jxin.faas.scheduler.domain.container.repository.mapper.ContainerMapper">
-  <resultMap id="BaseResultMap" type="com.jxin.faas.scheduler.domain.container.repository.table.Container">
+  <resultMap id="BaseResultMap" type="com.jxin.faas.scheduler.domain.container.repository.table.ContainerDO">
     <!--@mbg.generated-->
     <!--@Table container-->
     <id column="id" jdbcType="INTEGER" property="id" />
@@ -37,7 +37,7 @@
     delete from container
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.jxin.faas.scheduler.domain.container.repository.table.Container" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.jxin.faas.scheduler.domain.container.repository.table.ContainerDO" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into container (container_id, node_id, address, 
       port, "order", fun_id, 
@@ -50,7 +50,7 @@
       #{cpuUsageRatio,jdbcType=DECIMAL}, #{enabled,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
       #{modifyTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.jxin.faas.scheduler.domain.container.repository.table.Container" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.jxin.faas.scheduler.domain.container.repository.table.ContainerDO" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into container
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -142,7 +142,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jxin.faas.scheduler.domain.container.repository.table.Container">
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxin.faas.scheduler.domain.container.repository.table.ContainerDO">
     <!--@mbg.generated-->
     update container
     <set>
@@ -191,7 +191,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jxin.faas.scheduler.domain.container.repository.table.Container">
+  <update id="updateByPrimaryKey" parameterType="com.jxin.faas.scheduler.domain.container.repository.table.ContainerDO">
     <!--@mbg.generated-->
     update container
     set container_id = #{containerId,jdbcType=VARCHAR},

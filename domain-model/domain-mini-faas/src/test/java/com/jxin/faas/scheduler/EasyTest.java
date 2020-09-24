@@ -4,7 +4,7 @@ import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
-import com.jxin.faas.scheduler.domain.node.repository.table.Node;
+import com.jxin.faas.scheduler.domain.container.repository.table.NodeDO;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -142,8 +142,8 @@ public class EasyTest {
     }
 
     public void test(){
-        final Map<String, Node> nodeStatMap = Maps.newHashMap();
-        nodeStatMap.put("a1a1", new Node());
+        final Map<String, NodeDO> nodeStatMap = Maps.newHashMap();
+        nodeStatMap.put("a1a1", new NodeDO());
         System.out.println( MapUtil.join(nodeStatMap, StrUtil.COMMA, StrUtil.COLON, true));
     }
 

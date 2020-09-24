@@ -1,6 +1,6 @@
 package com.jxin.faas.scheduler.domain.container.repository.persistence;
 
-import com.jxin.faas.scheduler.domain.container.repository.table.Container;
+import com.jxin.faas.scheduler.domain.container.repository.table.ContainerDO;
 
 import java.util.Date;
 import java.util.List;
@@ -17,7 +17,7 @@ public interface IContainerRepository {
      * 保存容器数据
      * @param  container 容器 do
      */
-    void save(Container container);
+    void save(ContainerDO container);
     /**
      * 删除空闲容器
      * @param nodeId      节点Id
@@ -49,7 +49,7 @@ public interface IContainerRepository {
      * @param  outTime 超时时间
      * @return 可用的容器 do
      */
-    Optional<Container> getAndUseContainer(String funcName, Date outTime);
+    Optional<ContainerDO> getAndUseContainer(String funcName, Date outTime);
 
     /**
      * 统计指定nodeId的容器数

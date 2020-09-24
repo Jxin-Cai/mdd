@@ -1,6 +1,6 @@
 package com.jxin.faas.scheduler.domain.container.repository.mapper;
 
-import com.jxin.faas.scheduler.domain.container.repository.table.Container;
+import com.jxin.faas.scheduler.domain.container.repository.table.ContainerDO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;
@@ -15,21 +15,21 @@ import java.util.List;
 public interface ContainerMapper {
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Container record);
+    int insert(ContainerDO record);
 
-    int insertSelective(Container record);
+    int insertSelective(ContainerDO record);
 
-    Container selectByPrimaryKey(Integer id);
+    ContainerDO selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(Container record);
+    int updateByPrimaryKeySelective(ContainerDO record);
 
-    int updateByPrimaryKey(Container record);
+    int updateByPrimaryKey(ContainerDO record);
 
-    int updateByContainerId(@Param("updated") Container updated, @Param("containerId") String containerId);
+    int updateByContainerId(@Param("updated") ContainerDO updated, @Param("containerId") String containerId);
 
     int deleteByContainerIdIn(@Param("containerIdCollection") Collection<String> containerIdCollection);
 
-    Container findByEnabledAndFuncNameOrderByOrder(@Param("enabled") Boolean enabled, @Param("funcName") String funcName);
+    ContainerDO findByEnabledAndFuncNameOrderByOrder(@Param("enabled") Boolean enabled, @Param("funcName") String funcName);
 
     Integer countByNodeId(@Param("nodeId") String nodeId);
 

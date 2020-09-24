@@ -2,11 +2,14 @@ package com.jxin.faas.scheduler.interfaces.acl.nodeservice;
 
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
+import com.jxin.faas.scheduler.domain.container.dmo.entity.Container;
+import com.jxin.faas.scheduler.domain.container.dmo.val.FuncVal;
 import com.jxin.faas.scheduler.domain.container.dmo.val.NodeStatVal;
-import com.jxin.faas.scheduler.domain.container.repository.table.Container;
+import com.jxin.faas.scheduler.domain.container.dmo.val.NodeVal;
+import com.jxin.faas.scheduler.domain.container.repository.table.ContainerDO;
 import com.jxin.faas.scheduler.domain.container.service.acl.nodeservice.INodeServiceAcl;
-import com.jxin.faas.scheduler.domain.func.repository.table.Func;
-import com.jxin.faas.scheduler.domain.node.repository.table.Node;
+import com.jxin.faas.scheduler.domain.container.repository.table.FuncDO;
+import com.jxin.faas.scheduler.domain.container.repository.table.NodeDO;
 import com.jxin.faas.scheduler.infrastructure.util.IShutdownHook;
 import com.jxin.faas.scheduler.infrastructure.util.IdUtil;
 import io.grpc.ManagedChannel;
@@ -52,45 +55,45 @@ public class NodeServiceAcl implements INodeServiceAcl {
 
     @Override
     public Optional<Container> createContainer(String requestId,
-                                               Node node,
-                                               Func func) {
+                                               NodeVal nodeVal,
+                                               FuncVal funcVal) {
         final String containerId;
         try {
             final NodeServiceGrpc.NodeServiceBlockingStub nodeServiceBlockingStub =
-                    nodeServiceBlockingStubMap.get(node.getNodeId());
-            Assert.notNull(nodeServiceBlockingStub, "[NodeService],节点客户端桩不存在,nodeId: " + node.getId());
+                    nodeServiceBlockingStubMap.get(nodeVal.getNodeId());
+            Assert.notNull(nodeServiceBlockingStub, "[NodeService],节点客户端桩不存在,nodeId: " + nodeVal.getNodeId());
 
             final FunctionMeta functionMeta = FunctionMeta.newBuilder()
-                                                          .setFunctionName(func.getName())
-                                                          .setHandler(func.getHandler())
-                                                          .setMemoryInBytes(func.getMemorySize())
-                                                          .setTimeoutInMs(func.getTimeout())
+                                                          .setFunctionName(funcVal.getName())
+                                                          .setHandler(funcVal.getHandler())
+                                                          .setMemoryInBytes(funcVal.getMemorySize())
+                                                          .setTimeoutInMs(funcVal.getTimeout())
                                                           .build();
 
             final CreateContainerReply container =
                     nodeServiceBlockingStub.createContainer(CreateContainerRequest.newBuilder()
                                            .setRequestId(requestId)
-                                           .setName(func.getName() + COUNT.incrementAndGet())
+                                           .setName(funcVal.getName() + COUNT.incrementAndGet())
                                            .setFunctionMeta(functionMeta)
                                            .build());
             Assert.notNull(container, "[NodeService],创建容器,返回参数为null, requestId: " + requestId);
             containerId = container.getContainerId();
             Assert.notNull(containerId, "[NodeService],创建容器,返回容器Id为containerId, requestId: " + requestId);
         }catch (IllegalArgumentException e){
-            log.warn("[createContainer],创建容器发生业务异常, nodeId: {}, errMsg: {}", node.getId(), e.getMessage());
+            log.warn("[createContainer],创建容器发生业务异常, nodeId: {}, errMsg: {}", nodeVal.getNodeId(), e.getMessage());
             return Optional.empty();
         }catch (Exception e){
-            log.warn("[createContainer],创建容器发生系统异常, nodeId: {}, errMsg: {}", node.getId(), e.getMessage());
+            log.warn("[createContainer],创建容器发生系统异常, nodeId: {}, errMsg: {}", nodeVal.getNodeId(), e.getMessage());
             return Optional.empty();
         }
 
-        return Optional.of(Container.of(containerId, node, func));
+        return Optional.of(Container.of(containerId, nodeVal, funcVal));
     }
 
     @Override
-    public Optional<Container> loopGetContainer(String requestId, Func func, Node node, Integer maxCount) {
+    public Optional<Container> loopGetContainer(String requestId, FuncVal funcVal, NodeVal nodeVal, Integer maxCount) {
         for (int i = 0; i < maxCount; i++) {
-            final Optional<Container> containerOpt = createContainer(IdUtil.getRequestId(), node, func);
+            final Optional<Container> containerOpt = createContainer(requestId, nodeVal, funcVal);
             if(!containerOpt.isPresent()){
                 continue;
             }
@@ -98,6 +101,7 @@ public class NodeServiceAcl implements INodeServiceAcl {
         }
         return Optional.empty();
     }
+
     @Async("cleanExecutor")
     @Override
     public void removeContainer(String requestId, String nodeId, String containerId, CountDownLatch latch) {

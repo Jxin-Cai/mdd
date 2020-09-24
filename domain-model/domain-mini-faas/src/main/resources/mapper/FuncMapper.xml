@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jxin.faas.scheduler.domain.func.repository.persistence.IFuncRepository">
-  <resultMap id="BaseResultMap" type="com.jxin.faas.scheduler.domain.func.repository.table.Func">
+<mapper namespace="com.jxin.faas.scheduler.domain.container.repository.persistence.IFuncRepository">
+  <resultMap id="BaseResultMap" type="com.jxin.faas.scheduler.domain.container.repository.table.FuncDO">
     <!--@mbg.generated-->
     <!--@Table func-->
     <id column="id" jdbcType="INTEGER" property="id" />
@@ -29,7 +29,7 @@
     delete from func
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.jxin.faas.scheduler.domain.func.repository.table.Func" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.jxin.faas.scheduler.domain.container.repository.table.FuncDO" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into func ("name", memory_size, "handler", 
       timeout, create_time, modify_time, 
@@ -38,7 +38,7 @@
       #{timeout,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
       #{deleted,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.jxin.faas.scheduler.domain.func.repository.table.Func" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.jxin.faas.scheduler.domain.container.repository.table.FuncDO" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into func
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -88,7 +88,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jxin.faas.scheduler.domain.func.repository.table.Func">
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxin.faas.scheduler.domain.container.repository.table.FuncDO">
     <!--@mbg.generated-->
     update func
     <set>
@@ -116,7 +116,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jxin.faas.scheduler.domain.func.repository.table.Func">
+  <update id="updateByPrimaryKey" parameterType="com.jxin.faas.scheduler.domain.container.repository.table.FuncDO">
     <!--@mbg.generated-->
     update func
     set "name" = #{name,jdbcType=VARCHAR},

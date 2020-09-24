@@ -3,7 +3,7 @@ package com.jxin.faas.scheduler.interfaces.acl.resourcemanager;
 import cn.hutool.core.util.StrUtil;
 import com.jxin.faas.scheduler.domain.container.service.acl.nodeservice.INodeServiceAcl;
 import com.jxin.faas.scheduler.domain.container.service.acl.resourcemanager.IResourceManagerAcl;
-import com.jxin.faas.scheduler.domain.node.repository.table.Node;
+import com.jxin.faas.scheduler.domain.container.repository.table.NodeDO;
 import com.jxin.faas.scheduler.infrastructure.util.IJsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class ResourceManagerAcl implements IResourceManagerAcl {
     }
 
     @Override
-    public Optional<Node> reserveNode(String requestId, String accountId) {
+    public Optional<NodeDO> reserveNode(String requestId, String accountId) {
         try {
             final ReserveNodeReply reserveNodeReply =
                     resourceManagerStub.reserveNode(ReserveNodeRequest.newBuilder()
@@ -56,7 +56,7 @@ public class ResourceManagerAcl implements IResourceManagerAcl {
             }
             // 添加nodeservice的桩
             nodeServiceAcl.addNodeServiceStub(node.getId(), node.getAddress(), node.getNodeServicePort());
-            return Optional.of(Node.of(node, ORDER_COUNT.incrementAndGet()));
+            return Optional.of(NodeDO.of(node, ORDER_COUNT.incrementAndGet()));
         }catch (IllegalArgumentException e){
             log.warn("[createNode],获取节点发生业务异常,errMsg: {}", e.getMessage());
             return Optional.empty();

@@ -1,6 +1,6 @@
 package com.jxin.faas.scheduler.domain.container.service.acl.resourcemanager;
 
-import com.jxin.faas.scheduler.domain.node.repository.table.Node;
+import com.jxin.faas.scheduler.domain.container.repository.table.NodeDO;
 import resourcemanagerproto.ResourceManagerGrpc;
 
 import java.util.Optional;
@@ -20,7 +20,7 @@ public interface IResourceManagerAcl {
      * @param  accountId 用户Id
      * @return 节点信息 值对象
      */
-    Optional<Node> reserveNode(String requestId, String accountId);
+    Optional<NodeDO> reserveNode(String requestId, String accountId);
 
     /**
      * 释放节点

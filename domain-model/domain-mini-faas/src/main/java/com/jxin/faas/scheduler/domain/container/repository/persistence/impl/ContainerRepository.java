@@ -2,7 +2,7 @@ package com.jxin.faas.scheduler.domain.container.repository.persistence.impl;
 
 import com.jxin.faas.scheduler.domain.container.repository.mapper.ContainerMapper;
 import com.jxin.faas.scheduler.domain.container.repository.persistence.IContainerRepository;
-import com.jxin.faas.scheduler.domain.container.repository.table.Container;
+import com.jxin.faas.scheduler.domain.container.repository.table.ContainerDO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -28,7 +28,7 @@ public class ContainerRepository implements IContainerRepository {
     }
 
     @Override
-    public void save(Container container) {
+    public void save(ContainerDO container) {
         containerMapper.insertSelective(container);
     }
 
@@ -57,7 +57,7 @@ public class ContainerRepository implements IContainerRepository {
 
     @Override
     public void enableContainer(String containerId, Date outTime) {
-        final Container container = new Container();
+        final ContainerDO container = new ContainerDO();
         container.setEnabled(true);
         container.setOuttime(outTime);
         containerMapper.updateByContainerId(container, containerId);
@@ -65,15 +65,15 @@ public class ContainerRepository implements IContainerRepository {
 
     @Override
     public void releaseContainer(String containerId) {
-        final Container container = new Container();
+        final ContainerDO container = new ContainerDO();
         container.setEnabled(false);
         containerMapper.updateByContainerId(container, containerId);
     }
 
     @Transactional
     @Override
-    public Optional<Container> getAndUseContainer(String funcName, Date outTime) {
-        final Container container =
+    public Optional<ContainerDO> getAndUseContainer(String funcName, Date outTime) {
+        final ContainerDO container =
                 containerMapper.findByEnabledAndFuncNameOrderByOrder(false, funcName);
         if(container == null){
             return Optional.empty();

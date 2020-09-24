@@ -1,13 +1,15 @@
 package com.jxin.faas.scheduler.domain.container.service.impl;
 
 import com.jxin.faas.scheduler.domain.container.dmo.val.NodeStatVal;
+import com.jxin.faas.scheduler.domain.container.dmo.val.NodeVal;
+import com.jxin.faas.scheduler.domain.container.factory.INodeFactory;
 import com.jxin.faas.scheduler.domain.container.repository.persistence.IContainerRepository;
 import com.jxin.faas.scheduler.domain.container.service.acl.nodeservice.INodeServiceAcl;
 import com.jxin.faas.scheduler.domain.container.service.acl.resourcemanager.IResourceManagerAcl;
-import com.jxin.faas.scheduler.domain.container.service.api.INodeManager;
+import com.jxin.faas.scheduler.domain.container.service.INodeManager;
 import com.jxin.faas.scheduler.domain.container.service.exec.NodeException;
-import com.jxin.faas.scheduler.domain.node.repository.persistence.INodeRepository;
-import com.jxin.faas.scheduler.domain.node.repository.table.Node;
+import com.jxin.faas.scheduler.domain.container.repository.persistence.INodeRepository;
+import com.jxin.faas.scheduler.domain.container.repository.table.NodeDO;
 import com.jxin.faas.scheduler.infrastructure.util.IdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
@@ -48,16 +50,18 @@ public class NodeManager implements INodeManager {
 
     private final INodeRepository nodeRepository;
     private final IContainerRepository containerRepository;
+    private final INodeFactory nodeFactory;
 
     private final IResourceManagerAcl resourceManagerAcl;
     private final INodeServiceAcl nodeServiceAcl;
 
     @Autowired
-    public NodeManager(INodeRepository nodeRepository, IContainerRepository containerRepository, IResourceManagerAcl resourceManagerAcl, INodeServiceAcl nodeServiceAcl) {
+    public NodeManager(INodeRepository nodeRepository, IContainerRepository containerRepository, IResourceManagerAcl resourceManagerAcl, INodeServiceAcl nodeServiceAcl, INodeFactory nodeFactory) {
         this.nodeRepository = nodeRepository;
         this.containerRepository = containerRepository;
         this.resourceManagerAcl = resourceManagerAcl;
         this.nodeServiceAcl = nodeServiceAcl;
+        this.nodeFactory = nodeFactory;
     }
 
     @Async("scaleExecutor")
@@ -73,8 +77,8 @@ public class NodeManager implements INodeManager {
             }
             for (int i = 0; i < scaleCount - count; i++) {
                 // 获取新的节点来获取新的容器(本地数据存储和远程接口事物存在分布式事物,先不处理)
-                final Optional<Node> nodeOpt = resourceManagerAcl.reserveNode(IdUtil.getRequestId(), SYS_ACCOUNT_ID);
-                final Node node = nodeOpt.orElseThrow(() -> new NodeException("本地资源无法提供请求,且获取新node失败"));
+                final Optional<NodeDO> nodeOpt = resourceManagerAcl.reserveNode(IdUtil.getRequestId(), SYS_ACCOUNT_ID);
+                final NodeDO node = nodeOpt.orElseThrow(() -> new NodeException("本地资源无法提供请求,且获取新node失败"));
                 nodeRepository.save(node);
             }
         }catch (Exception e){
@@ -131,21 +135,22 @@ public class NodeManager implements INodeManager {
             return;
         }
         nodeStatValList.forEach(nodeStatVal -> {
-            final Node node = Node.of(nodeStatVal.getNodeId(), nodeStatVal.getMemoryIdleSize(), nodeStatVal.getCpuUsageRatio());
+            final NodeDO node = NodeDO.of(nodeStatVal.getNodeId(), nodeStatVal.getMemoryIdleSize(), nodeStatVal.getCpuUsageRatio());
             nodeRepository.update(node);
         });
     }
 
     @Override
-    public Optional<Node> getAndUseNode(long memSize) {
-        return nodeRepository.getAndUseNode(memSize, maxCpuRate);
+    public Optional<NodeVal> getAndUseNode(long memSize) {
+        final Optional<NodeDO> nodeDOOpt = nodeRepository.getAndUseNode(memSize, maxCpuRate);
+        return nodeDOOpt.map(nodeFactory::createNodeVal);
     }
 
     @Override
     public void reserveAndSaveNode() {
         // 获取新的节点来获取新的容器(本地数据存储和远程接口事物存在分布式事物,先不处理)
-        final Optional<Node> nodeOpt = resourceManagerAcl.reserveNode(IdUtil.getRequestId(), SYS_ACCOUNT_ID);
-        final Node node = nodeOpt.orElseThrow(() -> new NodeException("本地资源无法提供请求,且获取新node失败"));
+        final Optional<NodeDO> nodeOpt = resourceManagerAcl.reserveNode(IdUtil.getRequestId(), SYS_ACCOUNT_ID);
+        final NodeDO node = nodeOpt.orElseThrow(() -> new NodeException("本地资源无法提供请求,且获取新node失败"));
         nodeRepository.save(node);
     }
 }

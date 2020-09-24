@@ -38,8 +38,6 @@ spring:
     username: sa
     password:
 
-log4jdbc:
-
 
 dbs:
   faas:
@@ -49,7 +47,7 @@ dbs:
     mybatis:
       configLocation: sqlMapConfig.xml
       mapperLocations: classpath:mapper/*.xml
-      mapperScanner: com.jxin.faas.scheduler.domain.container.repository.mapper;com.jxin.faas.scheduler.domain.func.repository.mapper;com.jxin.faas.scheduler.domain.node.repository.mapper
+      mapperScanner: com.jxin.faas.scheduler.domain.container.repository.mapper
     pool:
       driverClassName: org.h2.Driver
       maximumPoolSize: 200

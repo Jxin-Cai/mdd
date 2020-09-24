@@ -1,9 +1,9 @@
 package com.jxin.faas.scheduler.domain.container.service.acl.nodeservice;
 
+import com.jxin.faas.scheduler.domain.container.dmo.entity.Container;
+import com.jxin.faas.scheduler.domain.container.dmo.val.FuncVal;
 import com.jxin.faas.scheduler.domain.container.dmo.val.NodeStatVal;
-import com.jxin.faas.scheduler.domain.container.repository.table.Container;
-import com.jxin.faas.scheduler.domain.func.repository.table.Func;
-import com.jxin.faas.scheduler.domain.node.repository.table.Node;
+import com.jxin.faas.scheduler.domain.container.dmo.val.NodeVal;
 
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
@@ -21,25 +21,25 @@ public interface INodeServiceAcl {
     /**
      * 创建容器
      * @param  requestId  请求id
-     * @param  node       节点
-     * @param  func       函数
+     * @param  nodeVal    节点值对象
+     * @param  funcVal    函数值对象
      * @return container 容器
      */
     Optional<Container> createContainer(String requestId,
-                                        Node node,
-                                        Func func);
+                                        NodeVal nodeVal,
+                                        FuncVal funcVal);
 
     /**
      * 循环创建容器
      * @param  requestId 请求id
-     * @param  node      节点
-     * @param  func      函数
+     * @param  nodeVal   节点值对象
+     * @param  funcVal   函数值对象
      * @param  maxCount  最大循环次数
      * @return container 容器
      */
     Optional<Container> loopGetContainer(String requestId,
-                                         Func func,
-                                         Node node,
+                                         FuncVal funcVal,
+                                         NodeVal nodeVal,
                                          Integer maxCount);
     /**
      * 删除容器

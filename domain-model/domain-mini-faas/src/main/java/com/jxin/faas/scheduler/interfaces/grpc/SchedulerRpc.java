@@ -1,8 +1,9 @@
 package com.jxin.faas.scheduler.interfaces.grpc;
 
-import com.jxin.faas.scheduler.domain.container.repository.table.Container;
-import com.jxin.faas.scheduler.domain.container.service.api.ISchedulerService;
-import com.jxin.faas.scheduler.domain.func.repository.table.Func;
+import com.jxin.faas.scheduler.domain.container.dmo.entity.Container;
+import com.jxin.faas.scheduler.domain.container.repository.table.ContainerDO;
+import com.jxin.faas.scheduler.application.service.ISchedulerService;
+import com.jxin.faas.scheduler.domain.container.repository.table.FuncDO;
 import com.jxin.faas.scheduler.infrastructure.util.IJsonUtil;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
@@ -48,14 +49,12 @@ public class SchedulerRpc extends SchedulerGrpc.SchedulerImplBase {
 
 
             final Container container =
-                    schedulerService.getContainer(request.getRequestId(),
-                                                  request.getAccountId(),
-                                                  warpFunc(request));
+                    schedulerService.getContainer(request);
             final AcquireContainerReply acquireContainerReply =
                     AcquireContainerReply.newBuilder()
-                                         .setNodeId(container.getNodeId())
-                                         .setNodeAddress(container.getAddress())
-                                         .setNodeServicePort(container.getPort())
+                                         .setNodeId(container.getNodeVal().getNodeId())
+                                         .setNodeAddress(container.getNodeVal().getAddress())
+                                         .setNodeServicePort(container.getNodeVal().getPort())
                                          .setContainerId(container.getContainerId())
                                          .build();
             responseObserver.onNext(acquireContainerReply);
@@ -69,13 +68,6 @@ public class SchedulerRpc extends SchedulerGrpc.SchedulerImplBase {
         responseObserver.onCompleted();
     }
 
-    private Func warpFunc(AcquireContainerRequest request) {
-        final FunctionConfig functionConfig = request.getFunctionConfig();
-        return Func.of(request.getFunctionName(),
-                       functionConfig.getMemoryInBytes(),
-                       functionConfig.getHandler(),
-                       (int)functionConfig.getTimeoutInMs());
-    }
 
     @Override
     public void returnContainer(ReturnContainerRequest request, StreamObserver<ReturnContainerReply> responseObserver) {
