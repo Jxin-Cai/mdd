@@ -112,6 +112,7 @@
     4. [《编译原理之美》](https://time.geekbang.org/column/intro/219)
     5. [《编译原理实战课》](https://time.geekbang.org/column/intro/314)
     6. 《深入浅出面向对象分析与设计》
-    7. 《Effective Java》
-    8. 《重构 改善既有代码的设计》
-    9. 《代码整洁之道》
+    7. 《对象设计：角色、职责与协作》
+    8. 《Effective Java》
+    9. 《重构 改善既有代码的设计》
+    10. 《代码整洁之道》
